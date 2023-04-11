@@ -4,7 +4,13 @@ import Router from "./routers/Router";
 import Navbar from "./components/Navbar";
 import { Fragment } from "react";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+
+//redux
 import { useSelector } from "react-redux";
+
+//toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const light = {
   palette: {
@@ -24,8 +30,26 @@ function App() {
   return (
     <ThemeProvider theme={isDarkTheme ? createTheme(dark) : createTheme(light)}>
       <CssBaseline />
-      <Navbar />
-      <Router />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+      <header>
+        <Navbar />
+      </header>
+      <main>
+        <Router />
+      </main>
+
+      <footer></footer>
     </ThemeProvider>
   );
 }

@@ -58,6 +58,14 @@ const RegisterPage = () => {
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
     const joiResponse = validateRegisterSchema(inputState);
+
+    const cloneInputState = JSON.parse(JSON.stringify(inputState));
+    const inputKeys = Object.keys(cloneInputState);
+    for (const key of inputKeys) {
+      if (inputState && !inputState[key] && key != ev.target.id) {
+        joiResponse[key] = "";
+      }
+    }
     setInputsErrorsState(joiResponse);
   };
   const handleCancelBtnClick = () => {
