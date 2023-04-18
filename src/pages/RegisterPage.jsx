@@ -14,9 +14,10 @@ import validateRegisterSchema from "../validations/registerValidation";
 import ROUTES from "../routers/ROUTES";
 import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
 import { Switch } from "@mui/material";
-import RegisterFieldComponent from "../components/RegisterFieldComponent";
+import RegisterFieldComponent from "../components/Register/RegisterFieldComponent";
 import { toast } from "react-toastify";
 import { string } from "joi";
+import RegisterButtonsComponent from "../components/Register/RegisterButtonsComponent";
 const RegisterPage = () => {
   const [disableState, setDisable] = useState(true);
   const [isBizState, setisBiz] = useState(false);
@@ -55,8 +56,8 @@ const RegisterPage = () => {
     { inputName: "House Number", idAndKey: "houseNumber", isReq: true },
     { inputName: "ZIP Code", idAndKey: "zipCode", isReq: false },
   ];
-  const handleBizChange = () => {
-    setisBiz(!isBizState);
+  const handleBizChange = (ev) => {
+    setisBiz(ev.target.checked);
   };
   const handleBtnClick = async (ev) => {
     try {
@@ -119,7 +120,7 @@ const RegisterPage = () => {
       if (typeof cloneInputState[key] === "string") {
         cloneInputState[key] = "";
       } else {
-        cloneInputState[key] = false;
+        setisBiz(false);
       }
     }
     setInputsErrorsState(null);
@@ -163,40 +164,12 @@ const RegisterPage = () => {
             ))}
             <Switch checked={isBizState} onChange={handleBizChange} />
           </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={handleCancelBtnClick}
-                color="error"
-              >
-                Cancel
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={handleResetBtnClick}
-                color="info"
-              >
-                <AutorenewOutlinedIcon />
-              </Button>
-            </Grid>
-          </Grid>
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={handleBtnClick}
-            color="success"
-            disabled={disableState}
-          >
-            Sign Up
-          </Button>
+          <RegisterButtonsComponent
+            onCancel={handleCancelBtnClick}
+            onReset={handleResetBtnClick}
+            onRegister={handleBtnClick}
+            disableProp={disableState}
+          />
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link to={ROUTES.LOGIN} sx={{ textDecoration: "none" }}>
