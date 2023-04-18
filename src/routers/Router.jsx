@@ -1,19 +1,76 @@
-import { Route, Routes } from "react-router-dom";
-import ROUTES from "./ROUTES";
+import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import ROUTES from "./ROUTES";
+import LoginPage from "../pages/LoginPage";
 import AboutPage from "../pages/AboutPage";
-import Page404 from "../pages/Page404";
+// import EditCardPage from "../pages/EditCardPage";
+// import ProfilePage from "../pages/ProfilePage";
+import SuperProtectedRoute from "../components/SuperProtectedRoute";
+import ProtectedRoute from "../components/ProtectedRoute";
+import LogoutPage from "../pages/Logout";
+// import SandboxPage from "../sandbox/SandboxPage";
+import SandboxPage from "../sandbox/SandboxPage";
+import NestedRoutePage from "../sandbox/NestedRoutePage/NestedRoutePage";
+import RP1 from "../sandbox/RP1";
+import RP2 from "../sandbox/RP2";
+import ReRenderPage from "../sandbox/ReRenderPage/ReRenderPage";
+import NestedPage1 from "../sandbox/NestedRoutePage/NestedPage1";
+import NestedPage2 from "../sandbox/NestedRoutePage/NestedPage2";
+import FavCardPage from "../pages/FavCardPage";
+
+//element={<ProtectedRoute element={<LogoutPage />} />}
 
 const Router = () => {
   return (
     <Routes>
       <Route path={ROUTES.HOME} element={<HomePage />} />
-      <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+      <Route path={ROUTES.FAKEHOME} element={<Navigate to={ROUTES.HOME} />} />
       <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+      <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path={ROUTES.ABOUT} element={<AboutPage />} />
-      <Route path={`*`} element={<Page404 />} />
+      <Route
+        path={ROUTES.LOGOUT}
+        element={<ProtectedRoute element={<LogoutPage />} />}
+      />
+      <Route
+        path={ROUTES.FAVCARDS}
+        element={<ProtectedRoute element={<FavCardPage />} />}
+      />
+      <Route path={ROUTES.SANDBOX} element={<SandboxPage />}>
+        <Route path="nr" element={<NestedRoutePage />}>
+          <Route path="nestedpage1" element={<NestedPage1 />} />
+          <Route path="nestedpage2" element={<NestedPage2 />} />
+        </Route>
+        <Route path="rerender" element={<ReRenderPage />} />
+        <Route path="redux1" element={<RP1 />} />
+        <Route path="redux2" element={<RP2 />} />
+      </Route>
+      {/* <Route
+        path="/edit/:id"
+        element={
+          <SuperProtectedRoute
+            isAdmin={true}
+            isBiz={true}
+            element={<EditCardPage />}
+          />
+        }
+      />
+      <Route
+        path={ROUTES.PROFILE}
+        element={<ProtectedRoute element={<ProfilePage />} />}
+      />
+      <Route
+        path="/createcard"
+        element={
+          <SuperProtectedRoute
+            isAdmin={false}
+            isBiz={true}
+            element={<h1>Create card</h1>}
+          />
+        }
+      /> */}
+      <Route path="*" element={<h1>404</h1>} />
     </Routes>
   );
 };

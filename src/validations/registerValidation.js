@@ -14,12 +14,15 @@ const registerSchema = Joi.object({
     .min(2)
     .max(10)
     .required(),
+  imageUrl: Joi.string().min(6).max(1024).allow(""),
+  imageAlt: Joi.string().min(6).max(1024).allow(""),
   state: Joi.string().min(2).max(40).allow(""),
   country: Joi.string().min(2).max(40).required(),
   city: Joi.string().min(2).max(40).required(),
   street: Joi.string().min(2).max(40).required(),
   houseNumber: Joi.string().min(2).max(40).required(),
-  zipCode: Joi.string().min(2).max(40).allow(""),
+  zipCode: Joi.number().min(2).max(40).allow(""),
+  biz: Joi.boolean(),
 });
 
 const validateRegisterSchema = (userInput) =>

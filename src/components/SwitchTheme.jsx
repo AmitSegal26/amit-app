@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { darkThemeActions } from "../store/themeSlice";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { toast } from "react-toastify";
 
 const SwitchTheme = () => {
   const dispatch = useDispatch();
@@ -13,14 +12,13 @@ const SwitchTheme = () => {
   );
   const changeTheme = () => {
     dispatch(darkThemeActions.changeTheme());
-    toast.success("YES");
   };
   return (
     <Typography>
       {isDark ? (
-        <ModeNightIcon onClick={changeTheme} />
+        <ModeNightIcon fontSize="large" onClick={changeTheme} />
       ) : (
-        <LightModeIcon onClick={changeTheme} />
+        <LightModeIcon fontSize="large" onClick={changeTheme} />
       )}
     </Typography>
   );

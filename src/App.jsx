@@ -1,9 +1,16 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Router from "./routers/Router";
-import Navbar from "./components/Navbar";
-import { Fragment } from "react";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import Navbar from "./components/Navbar/Navbar";
+import useLoggedIn from "./hooks/useLoggedIn";
+import { useEffect, useState } from "react";
+
+//MUI
+import {
+  CircularProgress,
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 
 //redux
 import { useSelector } from "react-redux";
@@ -24,6 +31,14 @@ const dark = {
   },
 };
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const loggedIn = useLoggedIn();
+  useEffect(() => {
+    (async () => {
+      await loggedIn();
+      setIsLoading(false);
+    })();
+  }, []);
   const isDarkTheme = useSelector(
     (bigRedux) => bigRedux.darkThemeSlice.isDarkTheme
   );
@@ -45,9 +60,7 @@ function App() {
       <header>
         <Navbar />
       </header>
-      <main>
-        <Router />
-      </main>
+      <main>{isLoading ? <CircularProgress /> : <Router />}</main>
 
       <footer></footer>
     </ThemeProvider>
