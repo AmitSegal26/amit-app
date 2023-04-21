@@ -18,6 +18,8 @@ import ReRenderPage from "../sandbox/ReRenderPage/ReRenderPage";
 import NestedPage1 from "../sandbox/NestedRoutePage/NestedPage1";
 import NestedPage2 from "../sandbox/NestedRoutePage/NestedPage2";
 import FavCardPage from "../pages/FavCardPage";
+import ProfilePage from "../pages/ProfilePage";
+import EditCardPage from "../pages/EditCardPage";
 
 //element={<ProtectedRoute element={<LogoutPage />} />}
 
@@ -46,7 +48,11 @@ const Router = () => {
         <Route path="redux1" element={<RP1 />} />
         <Route path="redux2" element={<RP2 />} />
       </Route>
-      {/* <Route
+      <Route
+        path={ROUTES.PROFILE}
+        element={<ProtectedRoute element={<ProfilePage />} />}
+      />
+      <Route
         path="/edit/:id"
         element={
           <SuperProtectedRoute
@@ -56,10 +62,8 @@ const Router = () => {
           />
         }
       />
-      <Route
-        path={ROUTES.PROFILE}
-        element={<ProtectedRoute element={<ProfilePage />} />}
-      />
+      {/* 
+      
       <Route
         path="/createcard"
         element={

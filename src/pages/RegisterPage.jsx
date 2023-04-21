@@ -20,7 +20,7 @@ import { string } from "joi";
 import RegisterButtonsComponent from "../components/Register/RegisterButtonsComponent";
 const RegisterPage = () => {
   const [disableState, setDisable] = useState(true);
-  const [isBizState, setisBiz] = useState(false);
+  const [isBizState, setIsBiz] = useState(false);
   const [inputState, setInputState] = useState({
     firstName: "",
     middleName: "",
@@ -57,13 +57,14 @@ const RegisterPage = () => {
     { inputName: "ZIP Code", idAndKey: "zipCode", isReq: false },
   ];
   const handleBizChange = (ev) => {
-    setisBiz(ev.target.checked);
+    setIsBiz(ev.target.checked);
   };
   const handleBtnClick = async (ev) => {
     try {
       const joiResponse = validateRegisterSchema(inputState);
       setInputsErrorsState(joiResponse);
       if (joiResponse) {
+        toast.error("Invalid Details, correct your mistakes!");
         return;
       }
       await axios.post("/users/register", {
@@ -120,7 +121,7 @@ const RegisterPage = () => {
       if (typeof cloneInputState[key] === "string") {
         cloneInputState[key] = "";
       } else {
-        setisBiz(false);
+        setIsBiz(false);
       }
     }
     setInputsErrorsState(null);

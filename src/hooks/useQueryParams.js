@@ -9,7 +9,6 @@ import { useSearchParams } from "react-router-dom";
 const useQueryParams = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   let query = {};
-  //   console.log("searchParams", searchParams);
   /*
         ?animal=dog&race=mammals
 
@@ -27,8 +26,6 @@ const useQueryParams = () => {
             race:"mammals"
         }
     */
-    // console.log({ key: value });
-    // console.log({ [key]: value });
   }
   return query;
 };

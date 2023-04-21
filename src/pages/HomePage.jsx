@@ -27,8 +27,6 @@ const HomePage = () => {
         filterFunc(data);
       })
       .catch((err) => {
-        console.log("err from axios", err.response.data);
-
         toast.error("Oops");
       });
   }, []);
@@ -61,17 +59,15 @@ const HomePage = () => {
   useEffect(() => {
     filterFunc();
   }, [qparams.filter]);
+
   const handleDeleteFromInitialCardsArr = async (id) => {
-    // let newCardsArr = JSON.parse(JSON.stringify(cardsArr));
-    // newCardsArr = newCardsArr.filter((item) => item.id != id);
-    // setCardsArr(newCardsArr);
     try {
       await axios.delete("/cards/" + id); // /cards/:id
       setCardsArr((newCardsArr) =>
         newCardsArr.filter((item) => item._id != id)
       );
     } catch (err) {
-      console.log("error when deleting", err.response.data);
+      toast.error(err.response.data);
     }
   };
   const handleEditFromInitialCardsArr = (id) => {
@@ -95,7 +91,8 @@ const HomePage = () => {
               img={item.image ? item.image.url : ""}
               onDelete={handleDeleteFromInitialCardsArr}
               onEdit={handleEditFromInitialCardsArr}
-              canEdit={payload && (payload.biz || payload.isAdmin)}
+              canEdit={payload && payload.biz}
+              canDelete={payload && payload.isAdmin}
             />
           </Grid>
         ))}
@@ -103,30 +100,4 @@ const HomePage = () => {
     </Box>
   );
 };
-
-/*
-  <CardComponent
-              id={item.id}
-              title={item.title}
-              price={item.price}
-              ----
-              onDelete={handleDeleteFromInitialCardsArr}
-              onEdit={handleEditFromInitialCardsArr}
-            />
-  component 1:
-    <CardComponent
-              id={1}
-              ----
-              onDelete={handleDeleteFromInitialCardsArr}
-              onEdit={handleEditFromInitialCardsArr}
-            />
-  component 2:
-    <CardComponent
-              id={2}
-              ----
-              onDelete={handleDeleteFromInitialCardsArr}
-              onEdit={handleEditFromInitialCardsArr}
-            />
-*/
-
 export default HomePage;

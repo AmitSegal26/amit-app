@@ -1,9 +1,10 @@
-import { Switch, Typography, colors } from "@mui/material";
+import { Paper, Switch, Typography, colors } from "@mui/material";
 import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { darkThemeActions } from "../store/themeSlice";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import "./Navbar/switchThemeCursor.css";
 
 const SwitchTheme = () => {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const SwitchTheme = () => {
     dispatch(darkThemeActions.changeTheme());
   };
   return (
-    <Typography>
+    <Typography className="themeSwitcher">
       {isDark ? (
         <ModeNightIcon fontSize="large" onClick={changeTheme} />
       ) : (

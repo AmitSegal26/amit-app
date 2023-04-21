@@ -14,6 +14,9 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const CardComponent = ({
   img,
@@ -24,9 +27,9 @@ const CardComponent = ({
   onDelete,
   onEdit,
   canEdit,
+  canDelete,
 }) => {
   const handleDeleteBtnClick = () => {
-    console.log("id", id);
     onDelete(id);
   };
   const handleEditBtnClick = () => {
@@ -35,6 +38,19 @@ const CardComponent = ({
   const handleFavBtnClick = () => {
     onEdit(id);
   };
+  const checkIfOwnsCard = async () => {
+    try {
+      let doesOwnOrNotCard = [];
+      let { data } = await axios.get("/cards/my-cards");
+      console.log("adas", data);
+      for (const card of data) {
+        console.log(card);
+      }
+    } catch (err) {
+      toast.error(err);
+    }
+  };
+  // checkIfOwnsCard();
   return (
     <Card square raised>
       <CardActionArea>
@@ -64,6 +80,12 @@ const CardComponent = ({
                 color="warning"
               />
             </Button>
+          </Fragment>
+        ) : (
+          ""
+        )}
+        {canDelete ? (
+          <Fragment>
             <Button>
               <DeleteIcon
                 sx={{ mr: 5, m: 2 }}
