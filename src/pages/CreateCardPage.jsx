@@ -1,80 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import EditIcon from "@mui/icons-material/Edit";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ROUTES from "../routers/ROUTES";
-import validateEditSchema, {
-  validateEditCardParamsSchema,
-} from "../validations/editValidation";
-import { CircularProgress } from "@mui/material";
+import validateCreateSchema from "../validations/createValidation";
 import atom from "../logo.svg";
 import { toast } from "react-toastify";
 import EditCardFieldComponent from "../components/EditCardFieldComponent";
 import FormButtonsComponent from "../components/FormButtonsComponent";
 
-const EditCardPage = () => {
-  const { id } = useParams();
-  const [inputState, setInputState] = useState(null);
+const CreateCardPage = () => {
+  const [inputState, setInputState] = useState({});
   const [disableSaveBtn, setDisable] = useState(true);
   const [inputsErrorsState, setInputsErrorsState] = useState({});
   const navigate = useNavigate();
-  useEffect(() => {
-    (async () => {
-      try {
-        const errors = validateEditCardParamsSchema({ id });
-        if (errors) {
-          // there was errors = incorrect id
-          navigate("/");
-          return;
-        }
-        const { data } = await axios.get("/cards/card/" + id);
-        let newInputState = {
-          ...data,
-        };
-        if (data.image && data.image.url) {
-          newInputState.url = data.image.url;
-        } else {
-          newInputState.url = "";
-        }
-        if (data.image && data.image.alt) {
-          newInputState.alt = data.image.alt;
-        } else {
-          newInputState.alt = "";
-        }
-        delete newInputState.image;
-        delete newInputState.likes;
-        delete newInputState._id;
-        delete newInputState.user_id;
-        delete newInputState.bizNumber;
-        delete newInputState.createdAt;
-        delete newInputState.address;
-        //.address is not acceptable by the server!
-        setInputState(newInputState);
-        if (!validateEditSchema(newInputState)) {
-          setDisable(false);
-        }
-      } catch (err) {
-        toast.error(err);
-      }
-    })();
-  }, [id]);
+
   const handleSaveBtnClick = async (ev) => {
     try {
-      const joiResponse = validateEditSchema(inputState);
-      console.log(joiResponse);
+      const joiResponse = validateCreateSchema(inputState);
       //!   bug on server - server required a zip code to be at least 1, without letting it be unrequired
       if (!inputState.zipCode) {
         inputState.zipCode = 1;
       }
       if (!joiResponse) {
         //move to homepage
-        await axios.put("/cards/" + id, inputState);
-        toast.success("Card: " + inputState.title + " UPDATED!");
+        await axios.post("/cards/", inputState);
+        toast.success("Card: " + inputState.title + " ADDED!");
         navigate(ROUTES.HOME);
       }
     } catch (err) {
@@ -90,7 +46,7 @@ const EditCardPage = () => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
-    const joiResponse = validateEditSchema(newInputState);
+    const joiResponse = validateCreateSchema(newInputState);
     if (!joiResponse) {
       setInputsErrorsState(joiResponse);
       setDisable(false);
@@ -119,9 +75,6 @@ const EditCardPage = () => {
     setInputState(cloneInputState);
   };
 
-  if (!inputState) {
-    return <CircularProgress />;
-  }
   const inputArr = [
     { inputName: "Title", idAndKey: "title", isReq: true },
     { inputName: "Sub Title", idAndKey: "subTitle", isReq: true },
@@ -190,4 +143,4 @@ const EditCardPage = () => {
     </Container>
   );
 };
-export default EditCardPage;
+export default CreateCardPage;

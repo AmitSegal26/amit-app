@@ -13,7 +13,7 @@ const HomePage = () => {
   const [cardsArr, setCardsArr] = useState(null);
   const navigate = useNavigate();
   let qparams = useQueryParams();
-  const payload = useSelector((bigPie) => bigPie.authSlice.payload);
+  const { payload } = useSelector((bigPie) => bigPie.authSlice);
 
   useEffect(() => {
     /*
@@ -87,7 +87,17 @@ const HomePage = () => {
               id={item._id}
               title={item.title}
               subTitle={item.subTitle}
-              description={item.description}
+              phone={item.phone}
+              address={
+                item.country +
+                " " +
+                item.city +
+                " " +
+                item.street +
+                " " +
+                item.houseNumber
+              }
+              numOfCard={item.bizNumber}
               img={item.image ? item.image.url : ""}
               onDelete={handleDeleteFromInitialCardsArr}
               onEdit={handleEditFromInitialCardsArr}

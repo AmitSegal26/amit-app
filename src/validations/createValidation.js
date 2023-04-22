@@ -2,7 +2,7 @@ import Joi from "joi";
 
 import validation from "./validation";
 
-const editCardSchema = Joi.object({
+const createCardSchema = Joi.object({
   title: Joi.string().min(2).max(256).required(),
   subTitle: Joi.string().min(2).max(256).required(),
   description: Joi.string().min(2).max(1024).required(),
@@ -12,7 +12,7 @@ const editCardSchema = Joi.object({
   street: Joi.string().min(2).max(256).required(),
   houseNumber: Joi.string().min(1).max(256).required(),
   zipCode: Joi.number().min(0).max(256).allow(null).allow("").allow(0),
-  phone: Joi.string().min(7).max(14).required(),
+  phone: Joi.string().min(9).max(14).required(),
   email: Joi.string()
     .email({ tlds: { allow: false } })
     .min(5)
@@ -23,15 +23,7 @@ const editCardSchema = Joi.object({
   alt: Joi.string().min(2).max(256).allow(""),
 });
 
-const editCardParamsSchema = Joi.object({
-  id: Joi.string().min(1).required(),
-});
+const validateCreateSchema = (userInput) =>
+  validation(createCardSchema, userInput);
 
-const validateEditSchema = (userInput) => validation(editCardSchema, userInput);
-
-const validateEditCardParamsSchema = (userInput) =>
-  validation(editCardParamsSchema, userInput);
-
-export { validateEditCardParamsSchema };
-
-export default validateEditSchema;
+export default validateCreateSchema;

@@ -14,6 +14,7 @@ import NavLinkComponent from "./NavLinkComponent";
 import { authActions } from "../../store/auth";
 import HamburgerMenu from "./HamburgerMenu";
 import ProfileComponent from "./ProfileComponent";
+import { MenuItem } from "@mui/material";
 
 // access to all
 const pages = [
@@ -57,22 +58,26 @@ const avatarPages = [
   },
 ];
 
-//admin/biz pages
-const adminBizPages = [
-  {
-    label: "Create",
-    url: ROUTES.REGISTER,
-  },
+//iz pages
+const bizPages = [
   {
     label: "My Cards",
     url: ROUTES.MYCARDS,
   },
+  {
+    label: "Create New Card",
+    url: ROUTES.CREATE,
+  },
 ];
+
+//admin pages
+const adminPages = [];
 
 const Navbar = () => {
   const isLoggedIn = useSelector(
     (bigPieBigState) => bigPieBigState.authSlice.isLoggedIn
   );
+  const { payload } = useSelector((bigPieBigState) => bigPieBigState.authSlice);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const dispatch = useDispatch();
 
@@ -97,6 +102,16 @@ const Navbar = () => {
           </Link>
           {/* main navbar */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {payload && payload.isAdmin
+              ? adminPages.map((page) => (
+                  <NavLinkComponent key={page.url} {...page} />
+                ))
+              : ""}
+            {payload && payload.biz
+              ? bizPages.map((page) => (
+                  <NavLinkComponent key={page.url} {...page} />
+                ))
+              : ""}
             {pages.map((page) => (
               <NavLinkComponent key={page.url} {...page} />
             ))}
@@ -127,7 +142,8 @@ const Navbar = () => {
             allPages={pages}
             notAuthedP={notAuthPages}
             authedP={authedPages}
-            adminOrBizP={adminBizPages}
+            bizP={bizPages}
+            adminP={adminPages}
           />
           {isLoggedIn && (
             <ProfileComponent

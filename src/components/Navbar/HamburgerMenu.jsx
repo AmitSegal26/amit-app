@@ -12,11 +12,13 @@ const HamburgerMenu = ({
   allPages,
   notAuthedP,
   authedP,
-  adminOrBizP,
+  bizP,
+  adminP,
 }) => {
   const isLoggedIn = useSelector(
     (bigPieBigState) => bigPieBigState.authSlice.isLoggedIn
   );
+  const { payload } = useSelector((bigPieBigState) => bigPieBigState.authSlice);
   const handleOpenNavMenu = (ev) => {
     openNavMenu(ev);
   };
@@ -75,6 +77,26 @@ const HamburgerMenu = ({
                 <NavLinkComponent key={page.url} {...page} />
               </MenuItem>
             ))}
+        {payload && payload.isAdmin
+          ? adminP.map((page) => (
+              <MenuItem
+                key={"miniLinks" + page.url}
+                onClick={handleCloseNavMenu}
+              >
+                <NavLinkComponent key={page.url} {...page} />
+              </MenuItem>
+            ))
+          : ""}
+        {payload && payload.biz
+          ? bizP.map((page) => (
+              <MenuItem
+                key={"miniLinks" + page.url}
+                onClick={handleCloseNavMenu}
+              >
+                <NavLinkComponent key={page.url} {...page} />
+              </MenuItem>
+            ))
+          : ""}
       </Menu>
     </Box>
   );

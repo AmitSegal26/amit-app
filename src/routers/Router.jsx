@@ -20,6 +20,8 @@ import NestedPage2 from "../sandbox/NestedRoutePage/NestedPage2";
 import FavCardPage from "../pages/FavCardPage";
 import ProfilePage from "../pages/ProfilePage";
 import EditCardPage from "../pages/EditCardPage";
+import CreateCardPage from "../pages/CreateCardPage";
+import CardPage from "../pages/CardPage";
 
 //element={<ProtectedRoute element={<LogoutPage />} />}
 
@@ -62,18 +64,27 @@ const Router = () => {
           />
         }
       />
-      {/* 
-      
+      <Route path={ROUTES.SPECIFICCARDPAGE + ":id"} element={<CardPage />} />
       <Route
-        path="/createcard"
+        path={ROUTES.CREATE}
         element={
           <SuperProtectedRoute
             isAdmin={false}
             isBiz={true}
-            element={<h1>Create card</h1>}
+            element={<CreateCardPage />}
           />
         }
-      /> */}
+      />
+      <Route
+        path={ROUTES.CREATE2}
+        element={
+          <SuperProtectedRoute
+            isAdmin={false}
+            isBiz={true}
+            element={<CreateCardPage />}
+          />
+        }
+      />
       <Route path="*" element={<h1>404</h1>} />
     </Routes>
   );

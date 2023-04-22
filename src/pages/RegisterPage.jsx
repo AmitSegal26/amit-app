@@ -17,7 +17,7 @@ import { Switch } from "@mui/material";
 import RegisterFieldComponent from "../components/Register/RegisterFieldComponent";
 import { toast } from "react-toastify";
 import { string } from "joi";
-import RegisterButtonsComponent from "../components/Register/RegisterButtonsComponent";
+import RegisterButtonsComponent from "../components/FormButtonsComponent";
 const RegisterPage = () => {
   const [disableState, setDisable] = useState(true);
   const [isBizState, setIsBiz] = useState(false);
@@ -125,6 +125,7 @@ const RegisterPage = () => {
       }
     }
     setInputsErrorsState(null);
+    setDisable(true);
     setInputState(cloneInputState);
   };
   return (

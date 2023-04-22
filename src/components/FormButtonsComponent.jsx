@@ -1,7 +1,7 @@
 import { Button, Grid } from "@mui/material";
 import React, { Fragment } from "react";
 import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
-const RegisterButtonsComponent = ({
+const FormButtonsComponent = ({
   onCancel,
   onReset,
   onRegister,
@@ -56,4 +56,4 @@ const RegisterButtonsComponent = ({
   );
 };
 
-export default RegisterButtonsComponent;
+export default FormButtonsComponent;
