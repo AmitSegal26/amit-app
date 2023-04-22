@@ -19,7 +19,6 @@ const ProfileComponent = ({ profilePages, logoutClickProp }) => {
     axios
       .get("/users/userInfo")
       .then(({ data }) => {
-        console.log(data);
         if (data.imageUrl) {
           setIsProfilePic(true);
           setProfilePic(data.imageUrl);

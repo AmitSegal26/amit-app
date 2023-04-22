@@ -93,7 +93,6 @@ const RegisterPage = () => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
-    // console.log("newInputState", ev.target.id, newInputState[ev.target.id]);
     const joiResponse = validateRegisterSchema(newInputState);
     if (!joiResponse) {
       setInputsErrorsState(joiResponse);

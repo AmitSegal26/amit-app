@@ -14,6 +14,7 @@ import axios from "axios";
 import ROUTES from "../routers/ROUTES";
 import validateLoginSchema from "../validations/loginValidation";
 import useLoggedIn from "../hooks/useLoggedIn";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [inputState, setInputState] = useState({
@@ -37,7 +38,7 @@ const LoginPage = () => {
       //move to homepage
       navigate(ROUTES.HOME);
     } catch (err) {
-      console.log("login error", err);
+      toast.error("login error", err.response.data);
     }
   };
   const handleInputChange = (ev) => {

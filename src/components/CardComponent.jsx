@@ -35,7 +35,6 @@ const CardComponent = ({
   canDelete,
 }) => {
   const navigate = useNavigate();
-  const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
   const handleDeleteBtnClick = () => {
     onDelete(id);
   };
@@ -49,23 +48,15 @@ const CardComponent = ({
     navigate(ROUTES.SPECIFICCARDPAGE + id);
   };
 
-  useEffect(() => {
-    const checkIfOwnsCard = async () => {
-      try {
-        console.log("FIRST CAN DELETE", canDelete);
-        let { data } = await axios.get("/cards/card/" + id);
-        canDelete = data.user_id == payload._id;
-      } catch (err) {
-        toast.error(err);
-      }
-    };
-    //Runs only on the first render
-    checkIfOwnsCard();
-  }, [canDelete]);
   return (
     <Card square raised>
       <CardActionArea>
-        <CardMedia component="img" image={img} onClick={handleImageClick} />
+        <CardMedia
+          component="img"
+          image={img}
+          onClick={handleImageClick}
+          height="200vh"
+        />
       </CardActionArea>
       <CardHeader title={title} subheader={subTitle}></CardHeader>
       <Divider variant="middle" />
@@ -104,7 +95,6 @@ const CardComponent = ({
         ) : (
           ""
         )}
-        {console.log(canDelete)}
         {canDelete ? (
           <Button>
             <DeleteIcon

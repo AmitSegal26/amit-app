@@ -66,7 +66,6 @@ const EditCardPage = () => {
   const handleSaveBtnClick = async (ev) => {
     try {
       const joiResponse = validateEditSchema(inputState);
-      console.log(joiResponse);
       //!   bug on server - server required a zip code to be at least 1, without letting it be unrequired
       if (!inputState.zipCode) {
         inputState.zipCode = 1;

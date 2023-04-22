@@ -80,9 +80,10 @@ const HomePage = () => {
 
   return (
     <Box>
+      <br />
       <Grid container spacing={2}>
         {cardsArr.map((item) => (
-          <Grid item xs={4} key={item._id + Date.now()}>
+          <Grid item xs={12} sm={6} md={4} xl={3} key={item._id + Date.now()}>
             <CardComponent
               id={item._id}
               title={item.title}
@@ -102,7 +103,10 @@ const HomePage = () => {
               onDelete={handleDeleteFromInitialCardsArr}
               onEdit={handleEditFromInitialCardsArr}
               canEdit={payload && payload.biz}
-              canDelete={payload && payload.isAdmin}
+              canDelete={
+                (payload && payload.isAdmin) ||
+                (payload && payload.biz && payload._id === item.user_id)
+              }
             />
           </Grid>
         ))}
