@@ -15,6 +15,7 @@ import ROUTES from "../routers/ROUTES";
 import validateLoginSchema from "../validations/loginValidation";
 import useLoggedIn from "../hooks/useLoggedIn";
 import { toast } from "react-toastify";
+import FormButtonsComponent from "../components/FormButtonsComponent";
 
 const LoginPage = () => {
   const [inputState, setInputState] = useState({
@@ -22,6 +23,7 @@ const LoginPage = () => {
     password: "",
   });
   const [inputsErrorsState, setInputsErrorsState] = useState(null);
+  const [disableBtn, setDisable] = useState(true);
   const loggedIn = useLoggedIn();
   const navigate = useNavigate();
 
@@ -38,13 +40,42 @@ const LoginPage = () => {
       //move to homepage
       navigate(ROUTES.HOME);
     } catch (err) {
-      toast.error("login error", err.response.data);
+      toast.error(err.response.data);
     }
+  };
+  const handleCancelClick = () => {
+    navigate(ROUTES.HOME);
+  };
+  const handleResetBtnClick = () => {
+    const cloneInputState = JSON.parse(JSON.stringify(inputState));
+    const inputKeys = Object.keys(cloneInputState);
+    for (const key of inputKeys) {
+      cloneInputState[key] = "";
+    }
+    setInputsErrorsState(null);
+    setDisable(true);
+    setInputState(cloneInputState);
   };
   const handleInputChange = (ev) => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
+    const joiResponse = validateLoginSchema(newInputState);
+    if (!joiResponse) {
+      setInputsErrorsState(joiResponse);
+      setDisable(false);
+      return;
+    }
+    setDisable(true);
+    const inputKeys = Object.keys(inputState);
+    for (const key of inputKeys) {
+      if (inputState && !inputState[key] && key != ev.target.id) {
+        if (joiResponse[key]) {
+          joiResponse[key] = "";
+        }
+      }
+    }
+    setInputsErrorsState(joiResponse);
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -104,14 +135,13 @@ const LoginPage = () => {
               )}
             </Grid>
           </Grid>
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={handleBtnClick}
-          >
-            Sign In
-          </Button>
+          <FormButtonsComponent
+            onCancel={handleCancelClick}
+            onReset={handleResetBtnClick}
+            onRegister={handleBtnClick}
+            clickBtnText="Sign In"
+            disableProp={disableBtn}
+          />
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link to={ROUTES.REGISTER}>

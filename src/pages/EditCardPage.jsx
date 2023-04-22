@@ -181,6 +181,7 @@ const EditCardPage = () => {
               onCancel={handleCancelBtnClick}
               onReset={handleResetBtnClick}
               onRegister={handleSaveBtnClick}
+              clickBtnText="Save Changes"
               disableProp={disableSaveBtn}
             />
           </Grid>

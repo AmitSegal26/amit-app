@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Avatar,
   Box,
   Button,
   CircularProgress,
   Container,
+  Divider,
   Grid,
   Typography,
 } from "@mui/material";
@@ -19,9 +20,7 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 
 const CardPage = () => {
   const { id } = useParams();
-  const [inputState, setInputState] = useState(null);
-  const [disableSaveBtn, setDisable] = useState(true);
-  const [inputsErrorsState, setInputsErrorsState] = useState({});
+  const [cardState, setCardState] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
@@ -33,28 +32,28 @@ const CardPage = () => {
           return;
         }
         const { data } = await axios.get("/cards/card/" + id);
-        let newInputState = {
+        let newcardState = {
           ...data,
         };
         if (data.image && data.image.url) {
-          newInputState.url = data.image.url;
+          newcardState.url = data.image.url;
         } else {
-          newInputState.url = "";
+          newcardState.url = "";
         }
         if (data.image && data.image.alt) {
-          newInputState.alt = data.image.alt;
+          newcardState.alt = data.image.alt;
         } else {
-          newInputState.alt = "";
+          newcardState.alt = "";
         }
-        delete newInputState.image;
-        delete newInputState.likes;
-        delete newInputState._id;
-        delete newInputState.user_id;
-        delete newInputState.bizNumber;
-        delete newInputState.createdAt;
-        delete newInputState.address;
+        delete newcardState.image;
+        // delete newcardState.likes;
+        delete newcardState._id;
+        delete newcardState.user_id;
+        // delete newcardState.bizNumber;
+        // delete newcardState.createdAt;
+        // delete newcardState.address;
         //.address is not acceptable by the server!
-        setInputState(newInputState);
+        setCardState(newcardState);
       } catch (err) {
         toast.error(err);
       }
@@ -65,9 +64,11 @@ const CardPage = () => {
     navigate(ROUTES.HOME);
   };
 
-  if (!inputState) {
+  if (!cardState) {
     return <CircularProgress />;
   }
+  let cardKeys = Object.keys(cardState);
+  console.log("🚀 ~ file: CardPage.jsx:71 ~ CardPage ~ cardKeys:", cardKeys);
   return (
     <Container component="main" maxWidth="xl">
       <br />
@@ -81,13 +82,12 @@ const CardPage = () => {
       </Grid>
       <Box
         sx={{
-          marginTop: 8,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h3">
+        <Typography align="center" component="h1" variant="h3">
           Card Page:
         </Typography>
         <Box
@@ -98,11 +98,36 @@ const CardPage = () => {
             maxHeight: { xs: 233, md: 167 },
             maxWidth: { xs: 350, md: 250 },
           }}
-          alt={inputState.alt ? inputState.alt : ""}
-          src={inputState.url ? inputState.url : atom}
+          alt={cardState.alt ? cardState.alt : ""}
+          src={cardState.url ? cardState.url : atom}
         />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "left",
+        }}
+      >
         <Box component="div" noValidate sx={{ mt: 3 }}>
-          <Grid container spacing={2}></Grid>
+          <Grid container spacing={2}>
+            {/* the ternary condition is for keeping the image url and alt outside the view of the user,
+             but without deleting them as a property so the image will not be damaged*/}
+            {cardKeys.map((propOfCard) =>
+              propOfCard !== "url" && propOfCard !== "alt" ? (
+                <Grid key={propOfCard} item xl={10}>
+                  <Typography variant="h6" gutterBottom color="white">
+                    <Button color="info" variant="outlined" disabled>
+                      {propOfCard}
+                    </Button>{" "}
+                    {cardState[propOfCard]}
+                  </Typography>
+                </Grid>
+              ) : (
+                ""
+              )
+            )}
+          </Grid>
         </Box>
       </Box>
     </Container>

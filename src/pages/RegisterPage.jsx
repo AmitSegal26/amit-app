@@ -169,6 +169,7 @@ const RegisterPage = () => {
             onCancel={handleCancelBtnClick}
             onReset={handleResetBtnClick}
             onRegister={handleBtnClick}
+            clickBtnText="Sign Up"
             disableProp={disableState}
           />
           <Grid container justifyContent="flex-end">

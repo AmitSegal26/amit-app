@@ -5,6 +5,7 @@ const FormButtonsComponent = ({
   onCancel,
   onReset,
   onRegister,
+  clickBtnText,
   disableProp,
 }) => {
   const handleCancelBtnClick = () => {
@@ -50,7 +51,7 @@ const FormButtonsComponent = ({
         color="success"
         disabled={disableProp}
       >
-        Sign Up
+        {clickBtnText}
       </Button>
     </Fragment>
   );

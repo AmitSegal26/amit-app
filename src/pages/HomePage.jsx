@@ -1,4 +1,10 @@
-import { Box, CircularProgress, Grid } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -80,6 +86,14 @@ const HomePage = () => {
 
   return (
     <Box>
+      <Typography variant="h3" color="white" gutterBottom>
+        Welcome! This is my website for business advertisements!
+      </Typography>
+      <Divider variant="middle" />
+      <Typography variant="h4" color="white" gutterBottom>
+        Here below you may find some of our business that thanks to them, this
+        website keeps on going!
+      </Typography>
       <br />
       <Grid container spacing={2}>
         {cardsArr.map((item) => (
@@ -102,11 +116,12 @@ const HomePage = () => {
               img={item.image ? item.image.url : ""}
               onDelete={handleDeleteFromInitialCardsArr}
               onEdit={handleEditFromInitialCardsArr}
-              canEdit={payload && payload.biz}
+              canEdit={payload && payload.biz && payload._id === item.user_id}
               canDelete={
                 (payload && payload.isAdmin) ||
                 (payload && payload.biz && payload._id === item.user_id)
               }
+              canLike={payload && !payload.biz && !payload.isAdmin}
             />
           </Grid>
         ))}

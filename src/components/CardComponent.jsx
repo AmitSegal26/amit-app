@@ -33,6 +33,7 @@ const CardComponent = ({
   onEdit,
   canEdit,
   canDelete,
+  canLike,
 }) => {
   const navigate = useNavigate();
   const handleDeleteBtnClick = () => {
@@ -77,13 +78,18 @@ const CardComponent = ({
         <Button>
           <PhoneIcon sx={{ mr: 5, m: 2 }} color="primary" />
         </Button>
-        <Button>
-          <FavoriteBorderIcon
-            sx={{ mr: 5, m: 2 }}
-            onClick={handleFavBtnClick}
-            color="error"
-          />
-        </Button>
+        {canLike ? (
+          <Button>
+            <FavoriteBorderIcon
+              sx={{ mr: 5, m: 2 }}
+              onClick={handleFavBtnClick}
+              color="error"
+            />
+          </Button>
+        ) : (
+          ""
+        )}
+
         {canEdit ? (
           <Button>
             <BorderColorIcon
