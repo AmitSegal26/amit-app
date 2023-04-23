@@ -73,6 +73,7 @@ const EditCardPage = () => {
     try {
       const joiResponse = validateEditSchema(inputState);
       //!   bug on server - server required a zip code to be at least 1, without letting it be unrequired
+      // if (!inputState.zipCode) {
       let newInputState = JSON.parse(JSON.stringify(inputState));
       delete newInputState.zipCode;
       if (!joiResponse) {

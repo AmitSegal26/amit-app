@@ -52,7 +52,9 @@ const CardPage = () => {
         delete newcardState.__v;
         delete newcardState._id;
         delete newcardState.user_id;
-        if (!newcardState.zipCode) {
+        console.log(newcardState.zipCode);
+        if (!newcardState.zipCode || newcardState.zipCode <= 1) {
+          console.log("here here here");
           delete newcardState.zipCode;
         }
 

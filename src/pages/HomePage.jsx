@@ -140,6 +140,7 @@ const HomePage = () => {
               img={item.image ? item.image.url : ""}
               onDelete={handleDeleteFromInitialCardsArr}
               onEdit={handleEditFromInitialCardsArr}
+              onLike={() => {}}
               canEdit={payload && payload.biz && payload._id === item.user_id}
               canDelete={
                 (payload && payload.isAdmin) ||

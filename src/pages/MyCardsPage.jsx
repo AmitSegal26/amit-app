@@ -107,6 +107,7 @@ const MyCardsPage = () => {
               img={card.image ? card.image.url : ""}
               onDelete={handleDeleteFromMyCardsArr}
               onEdit={handleEditFromMyCardsArr}
+              onLike={() => {}}
               canEdit={payload && payload.biz && payload._id === card.user_id}
               canDelete={
                 (payload && payload.isAdmin) ||

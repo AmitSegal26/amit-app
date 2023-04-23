@@ -32,6 +32,7 @@ const CardComponent = ({
   img,
   onDelete,
   onEdit,
+  onLike,
   canEdit,
   canDelete,
   canLike,
@@ -45,7 +46,7 @@ const CardComponent = ({
     onEdit(id);
   };
   const handleFavBtnClick = () => {
-    onEdit(id);
+    onLike(id);
   };
   const handleImageClick = () => {
     dispatch(prevPageActions.setPage());
@@ -81,7 +82,7 @@ const CardComponent = ({
         <Button>
           <PhoneIcon sx={{ mr: 5, m: 2 }} color="primary" />
         </Button>
-        {canLike ? (
+        {canLike || true ? (
           <Button>
             <FavoriteBorderIcon
               sx={{ mr: 5, m: 2 }}
