@@ -12,12 +12,15 @@ import axios from "axios";
 import CardComponent from "../components/CardComponent";
 import { toast } from "react-toastify";
 import useQueryParams from "../hooks/useQueryParams";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { prevPageActions } from "../store/whereFrom";
+import ROUTES from "../routers/ROUTES";
 
 const HomePage = () => {
   const [originalCardsArr, setOriginalCardsArr] = useState(null);
   const [cardsArr, setCardsArr] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   let qparams = useQueryParams();
   const { payload } = useSelector((bigPie) => bigPie.authSlice);
 
@@ -33,7 +36,7 @@ const HomePage = () => {
         filterFunc(data);
       })
       .catch((err) => {
-        toast.error("Oops");
+        toast.error("server ERR");
       });
   }, []);
   const filterFunc = (data) => {
@@ -49,17 +52,33 @@ const HomePage = () => {
         when component loaded and states not loaded
       */
       setOriginalCardsArr(data);
-      setCardsArr(data.filter((card) => card.title.startsWith(filter)));
-      return;
+      const regex = new RegExp("^\\d+$", "g");
+      if (regex.test(filter)) {
+        filter = +filter;
+        setCardsArr(data.filter((card) => card.bizNumber.startsWith(filter)));
+      } else {
+        setCardsArr(data.filter((card) => card.title.startsWith(filter)));
+      }
     }
     if (originalCardsArr) {
       /*
         when all loaded and states loaded
       */
       let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
-      setCardsArr(
-        newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
-      );
+      const regex = new RegExp("^\\d+$", "g");
+
+      if (regex.test(filter)) {
+        filter = +filter;
+        setCardsArr(
+          newOriginalCardsArr.filter((card) =>
+            card.bizNumber.startsWith(filter)
+          )
+        );
+      } else {
+        setCardsArr(
+          newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
+        );
+      }
     }
   };
   useEffect(() => {
@@ -77,20 +96,25 @@ const HomePage = () => {
     }
   };
   const handleEditFromInitialCardsArr = (id) => {
-    navigate(`/edit/${id}`); //localhost:3000/edit/123213
+    dispatch(prevPageActions.setPage(ROUTES.HOME));
+    navigate(`/edit/${id}`); //localhost:3000/edit/XXX
   };
 
   if (!cardsArr) {
     return <CircularProgress />;
   }
-
+  for (const item of cardsArr) {
+    if (item.title == "asdas") {
+      console.log("THIS IS IT", item);
+    }
+  }
   return (
     <Box>
-      <Typography variant="h3" color="white" gutterBottom>
+      <Typography variant="h3" color="main" gutterBottom>
         Welcome! This is my website for business advertisements!
       </Typography>
       <Divider variant="middle" />
-      <Typography variant="h4" color="white" gutterBottom>
+      <Typography variant="h4" color="main" gutterBottom>
         Here below you may find some of our business that thanks to them, this
         website keeps on going!
       </Typography>

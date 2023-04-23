@@ -13,12 +13,16 @@ import atom from "../logo.svg";
 import { toast } from "react-toastify";
 import EditCardFieldComponent from "../components/EditCardFieldComponent";
 import FormButtonsComponent from "../components/FormButtonsComponent";
+import { useSelector } from "react-redux";
+import { inputArr } from "../services/editInputs";
 
 const CreateCardPage = () => {
   const [inputState, setInputState] = useState({});
   const [disableSaveBtn, setDisable] = useState(true);
   const [inputsErrorsState, setInputsErrorsState] = useState({});
   const navigate = useNavigate();
+  const { page } = useSelector((bigRedux) => bigRedux.prevPageSlice);
+  let whereTo = ROUTES.HOME;
 
   const handleSaveBtnClick = async (ev) => {
     try {
@@ -37,10 +41,13 @@ const CreateCardPage = () => {
       toast.error("SERVER ERR: " + err.response.data);
     }
   };
+  if (page.endsWith("/mycards")) {
+    whereTo = ROUTES.MYCARDS;
+  }
   const handleCancelBtnClick = (ev) => {
     //move to homepage
     toast.warning("no changes were made");
-    navigate(ROUTES.HOME);
+    navigate(whereTo);
   };
   const handleInputChange = (ev) => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
@@ -53,14 +60,16 @@ const CreateCardPage = () => {
       return;
     }
     setDisable(true);
-    const inputKeys = Object.keys(inputState);
-    for (const key of inputKeys) {
-      if (inputState && !inputState[key] && key != ev.target.id) {
-        if (joiResponse[key]) {
-          joiResponse[key] = "";
-        }
+    for (const input of inputArr) {
+      if (
+        input.idAndKey &&
+        input.idAndKey != ev.target.id &&
+        !newInputState[input.idAndKey]
+      ) {
+        joiResponse[input.idAndKey] = "";
       }
     }
+    console.log("this is for shlomo", joiResponse);
     setInputsErrorsState(joiResponse);
   };
 
@@ -75,22 +84,6 @@ const CreateCardPage = () => {
     setInputState(cloneInputState);
   };
 
-  const inputArr = [
-    { inputName: "Title", idAndKey: "title", isReq: true },
-    { inputName: "Sub Title", idAndKey: "subTitle", isReq: true },
-    { inputName: "Description", idAndKey: "description", isReq: true },
-    { inputName: "State", idAndKey: "state", isReq: false },
-    { inputName: "Country", idAndKey: "country", isReq: true },
-    { inputName: "City", idAndKey: "city", isReq: true },
-    { inputName: "Street", idAndKey: "street", isReq: true },
-    { inputName: "House Number", idAndKey: "houseNumber", isReq: true },
-    { inputName: "ZIP Code", idAndKey: "zipCode", isReq: false },
-    { inputName: "Phone", idAndKey: "phone", isReq: true },
-    { inputName: "Email", idAndKey: "email", isReq: true },
-    { inputName: "Web Page URL", idAndKey: "web", isReq: false },
-    { inputName: "Image URL", idAndKey: "url", isReq: false },
-    { inputName: "Image Alt", idAndKey: "alt", isReq: false },
-  ];
   return (
     <Container component="main" maxWidth="md">
       <Box
@@ -135,6 +128,7 @@ const CreateCardPage = () => {
               onCancel={handleCancelBtnClick}
               onReset={handleResetBtnClick}
               onRegister={handleSaveBtnClick}
+              clickBtnText="Create New Business Card"
               disableProp={disableSaveBtn}
             />
           </Grid>

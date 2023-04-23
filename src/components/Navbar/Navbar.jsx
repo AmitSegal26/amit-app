@@ -22,10 +22,6 @@ const pages = [
     label: "About",
     url: ROUTES.ABOUT,
   },
-  {
-    label: "Sandbox",
-    url: ROUTES.SANDBOX,
-  },
 ];
 
 //not logged in users
@@ -71,7 +67,12 @@ const bizPages = [
 ];
 
 //admin pages
-const adminPages = [];
+const adminPages = [
+  {
+    label: "Sandbox",
+    url: ROUTES.SANDBOX,
+  },
+];
 
 const Navbar = () => {
   const isLoggedIn = useSelector(

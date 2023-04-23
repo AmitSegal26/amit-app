@@ -15,11 +15,12 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../routers/ROUTES";
+import { prevPageActions } from "../store/whereFrom";
 
 const CardComponent = ({
   id,
@@ -35,6 +36,7 @@ const CardComponent = ({
   canDelete,
   canLike,
 }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleDeleteBtnClick = () => {
     onDelete(id);
@@ -46,6 +48,7 @@ const CardComponent = ({
     onEdit(id);
   };
   const handleImageClick = () => {
+    dispatch(prevPageActions.setPage());
     navigate(ROUTES.SPECIFICCARDPAGE + id);
   };
 

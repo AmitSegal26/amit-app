@@ -4,12 +4,9 @@ import RegisterPage from "../pages/RegisterPage";
 import ROUTES from "./ROUTES";
 import LoginPage from "../pages/LoginPage";
 import AboutPage from "../pages/AboutPage";
-// import EditCardPage from "../pages/EditCardPage";
-// import ProfilePage from "../pages/ProfilePage";
 import SuperProtectedRoute from "../components/SuperProtectedRoute";
 import ProtectedRoute from "../components/ProtectedRoute";
 import LogoutPage from "../pages/Logout";
-// import SandboxPage from "../sandbox/SandboxPage";
 import SandboxPage from "../sandbox/SandboxPage";
 import NestedRoutePage from "../sandbox/NestedRoutePage/NestedRoutePage";
 import RP1 from "../sandbox/RP1";
@@ -22,8 +19,7 @@ import ProfilePage from "../pages/ProfilePage";
 import EditCardPage from "../pages/EditCardPage";
 import CreateCardPage from "../pages/CreateCardPage";
 import CardPage from "../pages/CardPage";
-
-//element={<ProtectedRoute element={<LogoutPage />} />}
+import MyCardsPage from "../pages/MyCardsPage";
 
 const Router = () => {
   return (
@@ -85,6 +81,7 @@ const Router = () => {
           />
         }
       />
+      <Route path={ROUTES.MYCARDS} element={<MyCardsPage />} />
       <Route path="*" element={<h1>404</h1>} />
     </Routes>
   );

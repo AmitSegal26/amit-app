@@ -17,11 +17,14 @@ import { toast } from "react-toastify";
 import EditIcon from "@mui/icons-material/Edit";
 import atom from "../logo.svg";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
+import { useSelector } from "react-redux";
 
 const CardPage = () => {
   const { id } = useParams();
   const [cardState, setCardState] = useState(null);
   const navigate = useNavigate();
+  const { page } = useSelector((bigRedux) => bigRedux.prevPageSlice);
+  let whereTo = ROUTES.HOME;
   useEffect(() => {
     (async () => {
       try {
@@ -46,29 +49,35 @@ const CardPage = () => {
           newcardState.alt = "";
         }
         delete newcardState.image;
-        // delete newcardState.likes;
+        delete newcardState.__v;
         delete newcardState._id;
         delete newcardState.user_id;
-        // delete newcardState.bizNumber;
-        // delete newcardState.createdAt;
-        // delete newcardState.address;
-        //.address is not acceptable by the server!
+        if (!newcardState.zipCode) {
+          delete newcardState.zipCode;
+        }
+
+        //* parsing to israeli date
+        newcardState.createdAt = new Date(
+          newcardState.createdAt
+        ).toLocaleDateString("hi");
         setCardState(newcardState);
       } catch (err) {
         toast.error(err);
       }
     })();
   }, [id]);
+  if (page.endsWith("/mycards")) {
+    whereTo = ROUTES.MYCARDS;
+  }
   const handleCancelBtnClick = (ev) => {
-    //move to homepage
-    navigate(ROUTES.HOME);
+    //move to homepage/my cards page
+    navigate(whereTo);
   };
 
   if (!cardState) {
     return <CircularProgress />;
   }
   let cardKeys = Object.keys(cardState);
-  console.log("🚀 ~ file: CardPage.jsx:71 ~ CardPage ~ cardKeys:", cardKeys);
   return (
     <Container component="main" maxWidth="xl">
       <br />
@@ -76,7 +85,7 @@ const CardPage = () => {
         <Grid item sm={3}>
           <Button variant="outlined" onClick={handleCancelBtnClick}>
             <FirstPageIcon />
-            Back to home
+            Back to {whereTo == ROUTES.MYCARDS ? "Your Cards" : "Home"}
           </Button>
         </Grid>
       </Grid>
@@ -95,8 +104,8 @@ const CardPage = () => {
           sx={{
             height: 233,
             width: 350,
-            maxHeight: { xs: 233, md: 167 },
-            maxWidth: { xs: 350, md: 250 },
+            maxHeight: { xs: 600, md: 600 },
+            maxWidth: { xs: 600, md: 600 },
           }}
           alt={cardState.alt ? cardState.alt : ""}
           src={cardState.url ? cardState.url : atom}

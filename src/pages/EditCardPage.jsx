@@ -16,6 +16,8 @@ import atom from "../logo.svg";
 import { toast } from "react-toastify";
 import EditCardFieldComponent from "../components/EditCardFieldComponent";
 import FormButtonsComponent from "../components/FormButtonsComponent";
+import { useSelector } from "react-redux";
+import { inputArr } from "../services/editInputs";
 
 const EditCardPage = () => {
   const { id } = useParams();
@@ -23,6 +25,8 @@ const EditCardPage = () => {
   const [disableSaveBtn, setDisable] = useState(true);
   const [inputsErrorsState, setInputsErrorsState] = useState({});
   const navigate = useNavigate();
+  const { page } = useSelector((bigRedux) => bigRedux.prevPageSlice);
+  let whereTo = ROUTES.HOME;
   useEffect(() => {
     (async () => {
       try {
@@ -46,6 +50,7 @@ const EditCardPage = () => {
         } else {
           newInputState.alt = "";
         }
+        delete newInputState.__v;
         delete newInputState.image;
         delete newInputState.likes;
         delete newInputState._id;
@@ -55,6 +60,7 @@ const EditCardPage = () => {
         delete newInputState.address;
         //.address is not acceptable by the server!
         setInputState(newInputState);
+        console.log("a", newInputState);
         if (!validateEditSchema(newInputState)) {
           setDisable(false);
         }
@@ -67,12 +73,11 @@ const EditCardPage = () => {
     try {
       const joiResponse = validateEditSchema(inputState);
       //!   bug on server - server required a zip code to be at least 1, without letting it be unrequired
-      if (!inputState.zipCode) {
-        inputState.zipCode = 1;
-      }
+      let newInputState = JSON.parse(JSON.stringify(inputState));
+      delete newInputState.zipCode;
       if (!joiResponse) {
         //move to homepage
-        await axios.put("/cards/" + id, inputState);
+        await axios.put("/cards/" + id, newInputState);
         toast.success("Card: " + inputState.title + " UPDATED!");
         navigate(ROUTES.HOME);
       }
@@ -80,22 +85,32 @@ const EditCardPage = () => {
       toast.error("SERVER ERR: " + err.response.data);
     }
   };
+  if (page.endsWith("/mycards")) {
+    whereTo = ROUTES.MYCARDS;
+  }
   const handleCancelBtnClick = (ev) => {
     //move to homepage
     toast.warning("no changes were made");
-    navigate(ROUTES.HOME);
+    navigate(whereTo);
   };
   const handleInputChange = (ev) => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
+
     const joiResponse = validateEditSchema(newInputState);
+    console.log(
+      "🚀 ~ file: EditCardPage.jsx:95 ~ handleInputChange ~ joiResponse:",
+      joiResponse
+    );
     if (!joiResponse) {
       setInputsErrorsState(joiResponse);
       setDisable(false);
+      console.log("here");
       return;
     }
     setDisable(true);
+    console.log("not here");
     const inputKeys = Object.keys(inputState);
     for (const key of inputKeys) {
       if (inputState && !inputState[key] && key != ev.target.id) {
@@ -121,22 +136,6 @@ const EditCardPage = () => {
   if (!inputState) {
     return <CircularProgress />;
   }
-  const inputArr = [
-    { inputName: "Title", idAndKey: "title", isReq: true },
-    { inputName: "Sub Title", idAndKey: "subTitle", isReq: true },
-    { inputName: "Description", idAndKey: "description", isReq: true },
-    { inputName: "State", idAndKey: "state", isReq: false },
-    { inputName: "Country", idAndKey: "country", isReq: true },
-    { inputName: "City", idAndKey: "city", isReq: true },
-    { inputName: "Street", idAndKey: "street", isReq: true },
-    { inputName: "House Number", idAndKey: "houseNumber", isReq: true },
-    { inputName: "ZIP Code", idAndKey: "zipCode", isReq: false },
-    { inputName: "Phone", idAndKey: "phone", isReq: true },
-    { inputName: "Email", idAndKey: "email", isReq: true },
-    { inputName: "Web Page URL", idAndKey: "web", isReq: false },
-    { inputName: "Image URL", idAndKey: "url", isReq: false },
-    { inputName: "Image Alt", idAndKey: "alt", isReq: false },
-  ];
   return (
     <Container component="main" maxWidth="md">
       <Box
