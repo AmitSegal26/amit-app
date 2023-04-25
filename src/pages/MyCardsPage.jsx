@@ -3,14 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Button, CircularProgress, Container, Grid } from "@mui/material";
 import CardComponent from "../components/CardComponent";
 import { prevPageActions } from "../store/whereFrom";
 import ROUTES from "../routers/ROUTES";
@@ -23,6 +16,8 @@ const MyCardsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
+  // let lengthOfArr = 0;
+  // let arrOfLikesCardId = [];
   useEffect(() => {
     axios
       .get("/cards/my-cards")
@@ -30,7 +25,8 @@ const MyCardsPage = () => {
         setCardsArr(data);
       })
       .catch((err) => {
-        toast.error(err.response.data);
+        console.log(err);
+        // toast.error(err.response.data);
       });
     axios
       .get("/users/userInfo")
@@ -41,6 +37,25 @@ const MyCardsPage = () => {
         toast.error(err.response.data);
       });
   }, []);
+
+  const addRemoveToLikesArray = async (id) => {
+    try {
+      let { data } = await axios.patch("/cards/card-like/" + id);
+      const newCardsArr = JSON.parse(JSON.stringify(cardsArr));
+      newCardsArr.map((card) => {
+        if (card._id == data._id) {
+          card.likes = [...data.likes];
+        }
+      });
+      setCardsArr(newCardsArr);
+    } catch (err) {
+      let error = err.response.data;
+      error.startsWith("card validation failed:") &&
+        toast.error(
+          "invalid card, cannot be added until some details are filled! sorry for the inconvenience"
+        );
+    }
+  };
 
   const handleDeleteFromMyCardsArr = async (id) => {
     try {
@@ -89,6 +104,9 @@ const MyCardsPage = () => {
       <Grid container spacing={2}>
         {cardsArr.map((card) => (
           <Grid item xs={12} sm={6} md={4} xl={3} key={card._id + Date.now()}>
+            {/* {setIsLikedForIconState(
+              arrOfLikesCardId.find((cardId) => cardId == card._id)
+            )} */}
             <CardComponent
               id={card._id}
               title={card.title}
@@ -107,13 +125,15 @@ const MyCardsPage = () => {
               img={card.image ? card.image.url : ""}
               onDelete={handleDeleteFromMyCardsArr}
               onEdit={handleEditFromMyCardsArr}
-              onLike={() => {}}
+              onLike={addRemoveToLikesArray}
               canEdit={payload && payload.biz && payload._id === card.user_id}
               canDelete={
                 (payload && payload.isAdmin) ||
                 (payload && payload.biz && payload._id === card.user_id)
               }
               canLike={payload && !payload.biz && !payload.isAdmin}
+              isLiked={card.likes.includes(payload._id)}
+              likesArrayOfUsers={card.likes}
             />
           </Grid>
         ))}
@@ -124,7 +144,12 @@ const MyCardsPage = () => {
           <AddCircleIcon
             onClick={handleCreateBtn}
             color="primary"
-            style={{ width: "6rem", height: "6rem", cursor: "pointer" }}
+            style={{
+              width: "4rem",
+              height: "4rem",
+              cursor: "pointer",
+            }}
+            sx={{ position: "fixed", top: "85%", left: "90%" }}
           />
         </Grid>
       </Grid>

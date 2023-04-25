@@ -7,6 +7,7 @@ import {
   Container,
   Divider,
   Grid,
+  Link,
   Typography,
 } from "@mui/material";
 import ROUTES from "../routers/ROUTES";
@@ -14,7 +15,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { validateEditCardParamsSchema } from "../validations/editValidation";
 import axios from "axios";
 import { toast } from "react-toastify";
-import EditIcon from "@mui/icons-material/Edit";
 import atom from "../logo.svg";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import { useSelector } from "react-redux";
@@ -48,6 +48,7 @@ const CardPage = () => {
         } else {
           newcardState.alt = "";
         }
+        console.log(newcardState);
         delete newcardState.image;
         delete newcardState.__v;
         delete newcardState._id;
@@ -57,7 +58,8 @@ const CardPage = () => {
           console.log("here here here");
           delete newcardState.zipCode;
         }
-
+        !newcardState.web && delete newcardState.web;
+        !newcardState.state && delete newcardState.state;
         //* parsing to israeli date
         newcardState.createdAt = new Date(
           newcardState.createdAt
@@ -131,7 +133,17 @@ const CardPage = () => {
                     <Button color="info" variant="outlined" disabled>
                       {propOfCard}
                     </Button>{" "}
-                    {cardState[propOfCard]}
+                    {propOfCard == "web" ? (
+                      <Link
+                        href={cardState.web}
+                        underline="hover"
+                        target="_blank"
+                      >
+                        {cardState.web}
+                      </Link>
+                    ) : (
+                      cardState[propOfCard]
+                    )}
                   </Typography>
                 </Grid>
               ) : (

@@ -15,8 +15,8 @@ const createCardSchema = Joi.object({
   phone: Joi.string().min(9).max(14).required(),
   email: Joi.string()
     .email({ tlds: { allow: false } })
-    .min(5)
-    .max(255)
+    .min(6)
+    .max(256)
     .required(),
   web: Joi.string().min(5).max(255).allow(""),
   url: Joi.string().min(6).max(1024).allow(""),

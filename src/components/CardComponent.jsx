@@ -10,7 +10,7 @@ import {
   Divider,
 } from "@mui/material";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PhoneIcon from "@mui/icons-material/Phone";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../routers/ROUTES";
 import { prevPageActions } from "../store/whereFrom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const CardComponent = ({
   id,
@@ -36,9 +37,12 @@ const CardComponent = ({
   canEdit,
   canDelete,
   canLike,
+  isLiked,
+  likesArrayOfUsers,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleDeleteBtnClick = () => {
     onDelete(id);
   };
@@ -82,18 +86,29 @@ const CardComponent = ({
         <Button>
           <PhoneIcon sx={{ mr: 5, m: 2 }} color="primary" />
         </Button>
+        {/* untill shlomo answers the question */}
         {canLike || true ? (
-          <Button>
-            <FavoriteBorderIcon
-              sx={{ mr: 5, m: 2 }}
-              onClick={handleFavBtnClick}
-              color="error"
-            />
-          </Button>
+          isLiked ? (
+            <Button>
+              <FavoriteIcon
+                sx={{ mr: 5, m: 2 }}
+                onClick={handleFavBtnClick}
+                color="error"
+              />
+            </Button>
+          ) : (
+            <Button>
+              <FavoriteBorderIcon
+                sx={{ mr: 5, m: 2 }}
+                onClick={handleFavBtnClick}
+                color="error"
+              />
+            </Button>
+          )
         ) : (
           ""
         )}
-
+        likes:{likesArrayOfUsers.length}
         {canEdit ? (
           <Button>
             <BorderColorIcon

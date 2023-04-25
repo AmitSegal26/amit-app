@@ -18,11 +18,13 @@ import ROUTES from "../routers/ROUTES";
 
 const HomePage = () => {
   const [originalCardsArr, setOriginalCardsArr] = useState(null);
+  const [isLikedForIconState, setIsLikedForIconState] = useState(false);
   const [cardsArr, setCardsArr] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let qparams = useQueryParams();
   const { payload } = useSelector((bigPie) => bigPie.authSlice);
+  let lengthOfArr = 0;
 
   useEffect(() => {
     /*
@@ -37,6 +39,15 @@ const HomePage = () => {
       })
       .catch((err) => {
         toast.error("server ERR");
+      });
+    axios
+      .get("/cards/get-my-fav-cards")
+      .then(({ data }) => {
+        lengthOfArr = data.length;
+        lengthOfArr && setIsLikedForIconState(true);
+      })
+      .catch((err) => {
+        toast.error(err.response.data);
       });
   }, []);
   const filterFunc = (data) => {
@@ -85,6 +96,24 @@ const HomePage = () => {
     filterFunc();
   }, [qparams.filter]);
 
+  const addRemoveToLikesArray = async (id) => {
+    try {
+      let { data } = await axios.patch("/cards/card-like/" + id);
+      const newCardsArr = JSON.parse(JSON.stringify(cardsArr));
+      newCardsArr.map((card) => {
+        if (card._id == data._id) {
+          card.likes = [...data.likes];
+        }
+      });
+      setCardsArr(newCardsArr);
+    } catch (err) {
+      let error = err.response.data;
+      error.startsWith("card validation failed:") &&
+        toast.error(
+          "invalid card, cannot be added until some details are filled! sorry for the inconvenience"
+        );
+    }
+  };
   const handleDeleteFromInitialCardsArr = async (id) => {
     try {
       await axios.delete("/cards/" + id); // /cards/:id
@@ -140,13 +169,15 @@ const HomePage = () => {
               img={item.image ? item.image.url : ""}
               onDelete={handleDeleteFromInitialCardsArr}
               onEdit={handleEditFromInitialCardsArr}
-              onLike={() => {}}
+              onLike={addRemoveToLikesArray}
               canEdit={payload && payload.biz && payload._id === item.user_id}
               canDelete={
                 (payload && payload.isAdmin) ||
                 (payload && payload.biz && payload._id === item.user_id)
               }
               canLike={payload && !payload.biz && !payload.isAdmin}
+              isLiked={item.likes.includes(payload._id)}
+              likesArrayOfUsers={item.likes}
             />
           </Grid>
         ))}
