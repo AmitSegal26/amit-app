@@ -1,4 +1,4 @@
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, Divider, Grid } from "@mui/material";
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -89,6 +89,10 @@ const FavCardPage = () => {
   }
   return (
     <Fragment>
+      <h1>Favorites Page</h1>
+      <h2>Here you can find your liked business cards and manage</h2>
+      <Divider variant="middle" />
+      <br />
       <Grid container spacing={2}>
         {likedCardsArrState.map((card) => (
           <Grid item xs={12} sm={6} md={4} xl={3} key={card._id + Date.now()}>
