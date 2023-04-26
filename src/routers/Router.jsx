@@ -26,18 +26,43 @@ const Router = () => {
     <Routes>
       <Route path={ROUTES.HOME} element={<HomePage />} />
       <Route path={ROUTES.FAKEHOME} element={<Navigate to={ROUTES.HOME} />} />
-      <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
-      <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path={ROUTES.ABOUT} element={<AboutPage />} />
       <Route
+        path={ROUTES.REGISTER}
+        element={
+          <ProtectedRoute
+            element={<RegisterPage />}
+            supposedToBeLoggedInThis={false}
+          />
+        }
+      />
+      <Route
+        path={ROUTES.LOGIN}
+        element={
+          <ProtectedRoute
+            element={<LoginPage />}
+            supposedToBeLoggedInThis={false}
+          />
+        }
+      />
+      <Route
         path={ROUTES.LOGOUT}
-        element={<ProtectedRoute element={<LogoutPage />} />}
+        element={<ProtectedRoute element={<LogoutPage />} isLogOut={true} />}
       />
       <Route
         path={ROUTES.FAVCARDS}
         element={<ProtectedRoute element={<FavCardPage />} />}
       />
-      <Route path={ROUTES.SANDBOX} element={<SandboxPage />}>
+      <Route
+        path={ROUTES.SANDBOX}
+        element={
+          <SuperProtectedRoute
+            isAdmin={true}
+            isBiz={false}
+            element={<SandboxPage />}
+          />
+        }
+      >
         <Route path="nr" element={<NestedRoutePage />}>
           <Route path="nestedpage1" element={<NestedPage1 />} />
           <Route path="nestedpage2" element={<NestedPage2 />} />
@@ -54,7 +79,7 @@ const Router = () => {
         path="/edit/:id"
         element={
           <SuperProtectedRoute
-            isAdmin={true}
+            isAdmin={false}
             isBiz={true}
             element={<EditCardPage />}
           />
@@ -81,7 +106,16 @@ const Router = () => {
           />
         }
       />
-      <Route path={ROUTES.MYCARDS} element={<MyCardsPage />} />
+      <Route
+        path={ROUTES.MYCARDS}
+        element={
+          <SuperProtectedRoute
+            isAdmin={false}
+            isBiz={true}
+            element={<MyCardsPage />}
+          />
+        }
+      />
       <Route path="*" element={<h1>404</h1>} />
     </Routes>
   );

@@ -121,7 +121,7 @@ const FavCardPage = () => {
                 (payload && payload.biz && payload._id === card.user_id)
               }
               canLike={payload && !payload.biz && !payload.isAdmin}
-              isLiked={card.likes.includes(payload._id)}
+              isLiked={payload && card.likes.includes(payload._id)}
               likesArrayOfUsers={card.likes}
             />
           </Grid>

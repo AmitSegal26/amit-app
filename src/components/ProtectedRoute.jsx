@@ -2,15 +2,35 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 import ROUTES from "../routers/ROUTES";
+import { toast } from "react-toastify";
 
-const ProtectedRoute = ({ element }) => {
+const ProtectedRoute = ({
+  element,
+  supposedToBeLoggedInThis = true,
+  isLogOut = false,
+}) => {
   //* logic section
   const isLoggedIn = useSelector((bigState) => bigState.authSlice.isLoggedIn);
   //* html section
-  if (isLoggedIn) {
-    return element;
+  if (supposedToBeLoggedInThis) {
+    //protectd for loggen in users
+    if (isLoggedIn) {
+      return element;
+    } else {
+      if (!isLogOut) {
+        //is not the log out component
+        toast.error("only for logged users. log in first!");
+      }
+      return <Navigate to={ROUTES.HOME} />;
+    }
   } else {
-    return <Navigate to={ROUTES.LOGIN} />;
+    //protected for new users or not logged in uesrs
+    if (!isLoggedIn) {
+      return element;
+    } else {
+      toast.error("already logged in and registered. log out first!");
+      return <Navigate to={ROUTES.HOME} />;
+    }
   }
 };
 export default ProtectedRoute;

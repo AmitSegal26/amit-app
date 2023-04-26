@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import atom from "../logo.svg";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import { useSelector } from "react-redux";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const CardPage = () => {
   const { id } = useParams();
@@ -55,7 +56,6 @@ const CardPage = () => {
         delete newcardState.user_id;
         console.log(newcardState.zipCode);
         if (!newcardState.zipCode || newcardState.zipCode <= 1) {
-          console.log("here here here");
           delete newcardState.zipCode;
         }
         !newcardState.web && delete newcardState.web;
@@ -128,7 +128,15 @@ const CardPage = () => {
              but without deleting them as a property so the image will not be damaged*/}
             {cardKeys.map((propOfCard) =>
               propOfCard !== "url" && propOfCard !== "alt" ? (
-                <Grid key={propOfCard} item xl={10}>
+                <Grid
+                  key={propOfCard}
+                  item
+                  sx={{ maxWidth: "15rem" }}
+                  xs={12}
+                  // sm={12}
+                  // md={6}
+                  // xl={4}
+                >
                   <Typography variant="h6" gutterBottom color="white">
                     <Button color="info" variant="outlined" disabled>
                       {propOfCard}
@@ -141,6 +149,11 @@ const CardPage = () => {
                       >
                         {cardState.web}
                       </Link>
+                    ) : propOfCard == "likes" ? (
+                      <Fragment>
+                        {cardState.likes.length}
+                        <FavoriteBorderIcon sx={{ ml: 1 }} color="error" />
+                      </Fragment>
                     ) : (
                       cardState[propOfCard]
                     )}

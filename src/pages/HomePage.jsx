@@ -24,7 +24,6 @@ const HomePage = () => {
   const dispatch = useDispatch();
   let qparams = useQueryParams();
   const { payload } = useSelector((bigPie) => bigPie.authSlice);
-  let lengthOfArr = 0;
 
   useEffect(() => {
     /*
@@ -38,16 +37,7 @@ const HomePage = () => {
         filterFunc(data);
       })
       .catch((err) => {
-        toast.error("server ERR");
-      });
-    axios
-      .get("/cards/get-my-fav-cards")
-      .then(({ data }) => {
-        lengthOfArr = data.length;
-        lengthOfArr && setIsLikedForIconState(true);
-      })
-      .catch((err) => {
-        toast.error(err.response.data);
+        toast.error("server ERR", err.response.data);
       });
   }, []);
   const filterFunc = (data) => {
@@ -176,7 +166,7 @@ const HomePage = () => {
                 (payload && payload.biz && payload._id === item.user_id)
               }
               canLike={payload && !payload.biz && !payload.isAdmin}
-              isLiked={item.likes.includes(payload._id)}
+              isLiked={payload && item.likes.includes(payload._id)}
               likesArrayOfUsers={item.likes}
             />
           </Grid>
