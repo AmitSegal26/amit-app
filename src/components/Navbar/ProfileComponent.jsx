@@ -69,7 +69,7 @@ const ProfileComponent = ({ profilePages, logoutClickProp }) => {
         id="menu-appbar"
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
         keepMounted
@@ -81,7 +81,11 @@ const ProfileComponent = ({ profilePages, logoutClickProp }) => {
         onClose={handleClose}
       >
         {avatarPages.map((page) => (
-          <MenuItem key={"miniLinks" + page.url} onClick={handleClose}>
+          <MenuItem
+            key={"miniLinks" + page.url}
+            sx={{ padding: "8px", minWidth: "100px" }}
+            onClick={handleClose}
+          >
             {page.url === ROUTES.LOGOUT ? (
               <NavLinkComponent
                 key={page.url}

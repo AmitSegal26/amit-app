@@ -114,7 +114,7 @@ const HomePage = () => {
     }
   };
   const handleEditFromInitialCardsArr = (id) => {
-    dispatch(prevPageActions.setPage(ROUTES.HOME));
+    dispatch(prevPageActions.setPage());
     navigate(`/edit/${id}`); //localhost:3000/edit/XXX
   };
 
@@ -164,7 +164,7 @@ const HomePage = () => {
                 (payload && payload.isAdmin) ||
                 (payload && payload.biz && payload._id === item.user_id)
               }
-              canLike={payload && !payload.biz && !payload.isAdmin}
+              canLike={payload}
               isLiked={payload && item.likes.includes(payload._id)}
               likesArrayOfUsers={item.likes}
             />

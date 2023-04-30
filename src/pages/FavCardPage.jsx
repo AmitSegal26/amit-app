@@ -120,7 +120,7 @@ const FavCardPage = () => {
                 (payload && payload.isAdmin) ||
                 (payload && payload.biz && payload._id === card.user_id)
               }
-              canLike={payload && !payload.biz && !payload.isAdmin}
+              canLike={payload}
               isLiked={payload && card.likes.includes(payload._id)}
               likesArrayOfUsers={card.likes}
             />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -41,8 +41,12 @@ const CreateCardPage = () => {
       toast.error("SERVER ERR: " + err.response.data);
     }
   };
-  if (page.endsWith("/mycards")) {
+  console.log(page);
+  if (page && page.endsWith("/mycards")) {
     whereTo = ROUTES.MYCARDS;
+  }
+  if (page && page.endsWith("/favorites")) {
+    whereTo = ROUTES.FAVCARDS;
   }
   const handleCancelBtnClick = (ev) => {
     //move to homepage

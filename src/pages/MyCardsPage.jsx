@@ -67,7 +67,7 @@ const MyCardsPage = () => {
     }
   };
   const handleEditFromMyCardsArr = (id) => {
-    dispatch(prevPageActions.setPage(ROUTES.MYCARDS));
+    dispatch(prevPageActions.setPage());
     navigate(`/edit/${id}`); //localhost:3000/edit/123213
   };
   const handleCreateBtn = () => {
@@ -130,7 +130,7 @@ const MyCardsPage = () => {
                 (payload && payload.isAdmin) ||
                 (payload && payload.biz && payload._id === card.user_id)
               }
-              canLike={payload && !payload.biz && !payload.isAdmin}
+              canLike={payload}
               isLiked={payload && card.likes.includes(payload._id)}
               likesArrayOfUsers={card.likes}
             />

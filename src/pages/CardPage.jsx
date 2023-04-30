@@ -70,8 +70,12 @@ const CardPage = () => {
       }
     })();
   }, [id]);
-  if (page.endsWith("/mycards")) {
+
+  if (page && page.endsWith("/mycards")) {
     whereTo = ROUTES.MYCARDS;
+  }
+  if (page && page.endsWith("/favorites")) {
+    whereTo = ROUTES.FAVCARDS;
   }
   const handleCancelBtnClick = (ev) => {
     //move to homepage/my cards page
@@ -89,7 +93,12 @@ const CardPage = () => {
         <Grid item sm={3}>
           <Button variant="outlined" onClick={handleCancelBtnClick}>
             <FirstPageIcon />
-            Back to {whereTo == ROUTES.MYCARDS ? "Your Cards" : "Home"}
+            Back to{" "}
+            {whereTo == ROUTES.MYCARDS
+              ? "Your Cards"
+              : whereTo == ROUTES.FAVCARDS
+              ? "Your Favorite Cards"
+              : "Home"}
           </Button>
         </Grid>
       </Grid>

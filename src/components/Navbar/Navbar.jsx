@@ -14,7 +14,7 @@ import NavLinkComponent from "./NavLinkComponent";
 import { authActions } from "../../store/auth";
 import HamburgerMenu from "./HamburgerMenu";
 import ProfileComponent from "./ProfileComponent";
-import { MenuItem } from "@mui/material";
+import { prevPageActions } from "../../store/whereFrom";
 
 // access to all
 const pages = [
@@ -94,12 +94,22 @@ const Navbar = () => {
     localStorage.clear();
     dispatch(authActions.logout());
   };
+  const handleLogoClick = () => {
+    dispatch(prevPageActions.setPageWith(ROUTES.HOME));
+  };
+  const handleMyCardsClick = () => {
+    dispatch(prevPageActions.setPageWith(ROUTES.MYCARDS));
+  };
+  const handleFavClick = () => {
+    dispatch(prevPageActions.setPageWith(ROUTES.FAVCARDS));
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar>
           <Link to={ROUTES.HOME}>
-            <AdbIcon sx={{ color: "white" }} />
+            <AdbIcon sx={{ color: "white" }} onClick={handleLogoClick} />
           </Link>
           {/* main navbar */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -109,20 +119,28 @@ const Navbar = () => {
                 ))
               : ""}
             {payload && payload.biz
-              ? bizPages.map((page) => (
-                  <NavLinkComponent key={page.url} {...page} />
-                ))
+              ? bizPages.map((page) =>
+                  page.url == ROUTES.MYCARDS ? (
+                    <NavLinkComponent
+                      key={page.url}
+                      {...page}
+                      onClick={handleMyCardsClick}
+                    />
+                  ) : (
+                    <NavLinkComponent key={page.url} {...page} />
+                  )
+                )
               : ""}
             {pages.map((page) => (
               <NavLinkComponent key={page.url} {...page} />
             ))}
             {isLoggedIn
               ? authedPages.map((page) =>
-                  page.url === ROUTES.LOGOUT ? (
+                  page.url === ROUTES.FAVCARDS ? (
                     <NavLinkComponent
                       key={page.url}
                       {...page}
-                      onClick={logoutClick}
+                      onClick={handleFavClick}
                     />
                   ) : (
                     <NavLinkComponent key={page.url} {...page} />

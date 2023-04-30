@@ -34,9 +34,9 @@ const CardComponent = ({
   onDelete,
   onEdit,
   onLike,
-  canEdit,
-  canDelete,
-  canLike,
+  canEdit = false,
+  canDelete = false,
+  canLike = false,
   isLiked,
   likesArrayOfUsers,
 }) => {

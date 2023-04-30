@@ -1,9 +1,10 @@
 import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ROUTES from "../../routers/ROUTES";
 import NavLinkComponent from "./NavLinkComponent";
+import { prevPageActions } from "../../store/whereFrom";
 
 const HamburgerMenu = ({
   openNavMenu,
@@ -15,6 +16,7 @@ const HamburgerMenu = ({
   bizP,
   adminP,
 }) => {
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector(
     (bigPieBigState) => bigPieBigState.authSlice.isLoggedIn
   );
@@ -24,6 +26,12 @@ const HamburgerMenu = ({
   };
   const handleCloseNavMenu = () => {
     closeNavMenu();
+  };
+  const handleMyCardsClick = () => {
+    dispatch(prevPageActions.setPageWith(ROUTES.MYCARDS));
+  };
+  const handleFavClick = () => {
+    dispatch(prevPageActions.setPageWith(ROUTES.FAVCARDS));
   };
   return (
     <Box
@@ -61,14 +69,27 @@ const HamburgerMenu = ({
           </MenuItem>
         ))}
         {isLoggedIn
-          ? authedP.map((page) => (
-              <MenuItem
-                key={"miniLinks" + page.url}
-                onClick={handleCloseNavMenu}
-              >
-                <NavLinkComponent key={page.url} {...page} />
-              </MenuItem>
-            ))
+          ? authedP.map((page) =>
+              page.url === ROUTES.FAVCARDS ? (
+                <MenuItem
+                  key={"miniLinks" + page.url}
+                  onClick={handleCloseNavMenu}
+                >
+                  <NavLinkComponent
+                    key={page.url}
+                    {...page}
+                    onClick={handleFavClick}
+                  />
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  key={"miniLinks" + page.url}
+                  onClick={handleCloseNavMenu}
+                >
+                  <NavLinkComponent key={page.url} {...page} />
+                </MenuItem>
+              )
+            )
           : notAuthedP.map((page) => (
               <MenuItem
                 key={"miniLinks" + page.url}
@@ -88,14 +109,27 @@ const HamburgerMenu = ({
             ))
           : ""}
         {payload && payload.biz
-          ? bizP.map((page) => (
-              <MenuItem
-                key={"miniLinks" + page.url}
-                onClick={handleCloseNavMenu}
-              >
-                <NavLinkComponent key={page.url} {...page} />
-              </MenuItem>
-            ))
+          ? bizP.map((page) =>
+              page.url == ROUTES.MYCARDS ? (
+                <MenuItem
+                  key={"miniLinks" + page.url}
+                  onClick={handleCloseNavMenu}
+                >
+                  <NavLinkComponent
+                    key={page.url}
+                    {...page}
+                    onClick={handleMyCardsClick}
+                  />
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  key={"miniLinks" + page.url}
+                  onClick={handleCloseNavMenu}
+                >
+                  <NavLinkComponent key={page.url} {...page} />
+                </MenuItem>
+              )
+            )
           : ""}
       </Menu>
     </Box>

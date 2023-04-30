@@ -10,6 +10,9 @@ const prevPageSlice = createSlice({
     setPage(state) {
       state.page = window.location.href;
     },
+    setPageWith(state, action) {
+      state.page = action.payload;
+    },
   },
 });
 

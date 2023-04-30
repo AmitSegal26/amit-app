@@ -89,6 +89,9 @@ const EditCardPage = () => {
   if (page.endsWith("/mycards")) {
     whereTo = ROUTES.MYCARDS;
   }
+  if (page && page.endsWith("/favorites")) {
+    whereTo = ROUTES.FAVCARDS;
+  }
   const handleCancelBtnClick = (ev) => {
     //move to homepage
     toast.warning("no changes were made");
