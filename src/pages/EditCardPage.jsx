@@ -60,7 +60,7 @@ const EditCardPage = () => {
         delete newInputState.address;
         //.address is not acceptable by the server!
         setInputState(newInputState);
-        console.log("a", newInputState);
+
         if (!validateEditSchema(newInputState)) {
           setDisable(false);
         }
@@ -101,20 +101,13 @@ const EditCardPage = () => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
-
     const joiResponse = validateEditSchema(newInputState);
-    console.log(
-      "🚀 ~ file: EditCardPage.jsx:95 ~ handleInputChange ~ joiResponse:",
-      joiResponse
-    );
     if (!joiResponse) {
       setInputsErrorsState(joiResponse);
       setDisable(false);
-      console.log("here");
       return;
     }
     setDisable(true);
-    console.log("not here");
     const inputKeys = Object.keys(inputState);
     for (const key of inputKeys) {
       if (inputState && !inputState[key] && key != ev.target.id) {

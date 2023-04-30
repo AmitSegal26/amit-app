@@ -123,7 +123,6 @@ const HomePage = () => {
   }
   for (const item of cardsArr) {
     if (item.title == "asdas") {
-      console.log("THIS IS IT", item);
     }
   }
   return (

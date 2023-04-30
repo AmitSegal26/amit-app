@@ -41,7 +41,7 @@ const CreateCardPage = () => {
       toast.error("SERVER ERR: " + err.response.data);
     }
   };
-  console.log(page);
+
   if (page && page.endsWith("/mycards")) {
     whereTo = ROUTES.MYCARDS;
   }
@@ -73,7 +73,7 @@ const CreateCardPage = () => {
         joiResponse[input.idAndKey] = "";
       }
     }
-    console.log("this is for shlomo", joiResponse);
+
     setInputsErrorsState(joiResponse);
   };
 

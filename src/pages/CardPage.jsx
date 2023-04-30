@@ -49,12 +49,12 @@ const CardPage = () => {
         } else {
           newcardState.alt = "";
         }
-        console.log(newcardState);
+
         delete newcardState.image;
         delete newcardState.__v;
         delete newcardState._id;
         delete newcardState.user_id;
-        console.log(newcardState.zipCode);
+
         if (!newcardState.zipCode || newcardState.zipCode <= 1) {
           delete newcardState.zipCode;
         }

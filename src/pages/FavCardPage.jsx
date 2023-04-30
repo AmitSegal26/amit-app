@@ -23,22 +23,16 @@ const FavCardPage = () => {
       .then(({ data }) => {
         setOriginalLikedCardsArrState(data);
         setLikedCardsArrState(data);
-        console.log("GOOD", data);
       })
-      .catch((err) => {
-        console.log("ERR" + err.response.data);
-      });
+      .catch((err) => {});
   }, []);
   useEffect(() => {
-    console.log("here");
     axios
       .get("/cards/get-my-fav-cards")
       .then(({ data }) => {
         setLikedCardsArrState(data);
       })
-      .catch((err) => {
-        console.log("ERR" + err.response.data);
-      });
+      .catch((err) => {});
   }, [originalLikedCardsArrState]);
   const addRemoveToLikesArray = async (id) => {
     try {

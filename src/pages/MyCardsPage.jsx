@@ -24,7 +24,6 @@ const MyCardsPage = () => {
         setCardsArr(data);
       })
       .catch((err) => {
-        console.log(err);
         // toast.error(err.response.data);
       });
     axios
