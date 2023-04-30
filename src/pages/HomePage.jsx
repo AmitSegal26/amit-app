@@ -18,7 +18,6 @@ import ROUTES from "../routers/ROUTES";
 
 const HomePage = () => {
   const [originalCardsArr, setOriginalCardsArr] = useState(null);
-  const [isLikedForIconState, setIsLikedForIconState] = useState(false);
   const [cardsArr, setCardsArr] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
