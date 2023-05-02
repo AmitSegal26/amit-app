@@ -1,13 +1,14 @@
 import { AccountCircle } from "@mui/icons-material";
 import { Avatar, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import React, { Fragment, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ROUTES from "../../routers/ROUTES";
 import NavLinkComponent from "./NavLinkComponent";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
 const ProfileComponent = ({ profilePages, logoutClickProp }) => {
+  const navigate = useNavigate();
   const [isProfilePic, setIsProfilePic] = useState(false);
   const [profilePic, setProfilePic] = useState("");
   const [profilePicAlt, setProfilePicAlt] = useState("");

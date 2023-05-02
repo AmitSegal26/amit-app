@@ -1,6 +1,5 @@
-import { memo, useState } from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -12,11 +11,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import validateRegisterSchema from "../validations/registerValidation";
 import ROUTES from "../routers/ROUTES";
-import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
 import { Switch } from "@mui/material";
 import RegisterFieldComponent from "../components/Register/RegisterFieldComponent";
 import { toast } from "react-toastify";
-import { string } from "joi";
 import RegisterButtonsComponent from "../components/FormButtonsComponent";
 const RegisterPage = () => {
   const [disableState, setDisable] = useState(true);
@@ -151,7 +148,7 @@ const RegisterPage = () => {
                   nameOfInput={input.inputName}
                   typeofInput={input.idAndKey}
                   isReq={input.isReq}
-                  onInputeChange={handleInputChange}
+                  onInputChange={handleInputChange}
                   value={inputState[input.idAndKey]}
                 />
                 {inputsErrorsState && inputsErrorsState[input.idAndKey] && (

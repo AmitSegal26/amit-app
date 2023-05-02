@@ -5,11 +5,11 @@ const RegisterFieldComponent = ({
   nameOfInput,
   typeofInput,
   isReq,
-  onInputeChange,
+  onInputChange,
   value,
 }) => {
-  const handleInputChange = () => {
-    onInputeChange();
+  const handleInputChange = (ev) => {
+    onInputChange(ev);
   };
   if (typeofInput == "password") {
     return (
@@ -22,7 +22,7 @@ const RegisterFieldComponent = ({
         label={nameOfInput}
         autoFocus
         value={value}
-        onChange={onInputeChange}
+        onChange={handleInputChange}
       />
     );
   }
@@ -34,7 +34,7 @@ const RegisterFieldComponent = ({
       id={typeofInput}
       label={nameOfInput}
       value={value}
-      onChange={onInputeChange}
+      onChange={handleInputChange}
     />
   );
 };
