@@ -96,7 +96,6 @@ const ProfilePage = () => {
     }
   };
   const handleInputChange = (ev) => {
-    console.log(ev);
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
@@ -164,7 +163,7 @@ const ProfilePage = () => {
                 inputChange={handleInputChange}
                 inputValue={inputState[input.idAndKey]}
                 inputErrors={inputsErrorsState}
-              />
+              ></EditCardFieldComponent>
             ))}
           </Grid>
           <Switch checked={isBizState} onChange={handleBizChange} />
