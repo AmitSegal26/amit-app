@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -12,17 +8,19 @@ import validateProfileEditSchema from "../validations/profileEditValidation";
 import ROUTES from "../routers/ROUTES";
 import { CircularProgress, Switch } from "@mui/material";
 import { toast } from "react-toastify";
-import RegisterButtonsComponent from "../components/FormButtonsComponent";
 import profileInputArr from "../services/editInputs";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store/auth";
 import EditCardFieldComponent from "../components/EditCardFieldComponent";
+import ProfilePageTitles from "../components/Profile/ProfilePageTitles";
+import ProfilePageBtnsAndLinks from "../components/Profile/ProfilePageBtnsAndLinks";
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const [disableState, setDisable] = useState(true);
   const [isBizState, setIsBiz] = useState(false);
   const [inputState, setInputState] = useState(null);
   const [inputsErrorsState, setInputsErrorsState] = useState({});
+  const [disableFieldState, setDisableFieldState] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
@@ -39,7 +37,6 @@ const ProfilePage = () => {
           delete newInputState.zipCode;
         }
         setInputState(newInputState);
-
         if (!validateProfileEditSchema(newInputState)) {
           setDisable(false);
         }
@@ -50,6 +47,11 @@ const ProfilePage = () => {
   }, []);
   const handleBizChange = (ev) => {
     setIsBiz(ev.target.checked);
+  };
+  const handleOpenEditClick = () => {
+    console.log("before " + disableFieldState);
+    setDisableFieldState(!disableFieldState);
+    console.log("after " + !disableFieldState);
   };
   const handleBtnClick = async (ev) => {
     try {
@@ -146,12 +148,7 @@ const ProfilePage = () => {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <AccountBoxIcon />
-        </Avatar>
-        <Typography component="h1" variant="h4">
-          Profile Page
-        </Typography>
+        <ProfilePageTitles disableFieldStateProp={disableFieldState} />
         <Box component="div" noValidate sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             {profileInputArr.map((input) => (
@@ -163,29 +160,23 @@ const ProfilePage = () => {
                 inputChange={handleInputChange}
                 inputValue={inputState[input.idAndKey]}
                 inputErrors={inputsErrorsState}
+                disabledProp={disableFieldState}
               ></EditCardFieldComponent>
             ))}
           </Grid>
-          <Switch checked={isBizState} onChange={handleBizChange} />
-          <RegisterButtonsComponent
-            onCancel={handleCancelBtnClick}
-            onReset={handleResetBtnClick}
-            onRegister={handleBtnClick}
-            clickBtnText="Save Changes"
-            disableProp={disableState}
+          <Switch
+            checked={isBizState}
+            disabled={disableFieldState}
+            onChange={handleBizChange}
           />
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link to={ROUTES.LOGIN} sx={{ textDecoration: "none" }}>
-                <Typography
-                  component="h6"
-                  sx={{ color: "green", textDecoration: "none" }}
-                >
-                  Already have an account? Sign in
-                </Typography>
-              </Link>
-            </Grid>
-          </Grid>
+          <ProfilePageBtnsAndLinks
+            onOpenEditDetails={handleOpenEditClick}
+            onCancelBtn={handleCancelBtnClick}
+            onResetBtn={handleResetBtnClick}
+            onRegisterBtn={handleBtnClick}
+            disableFieldStateProp={disableFieldState}
+            disableBtnProp={disableState}
+          />
         </Box>
       </Box>
     </Container>

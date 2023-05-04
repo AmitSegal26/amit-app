@@ -14,7 +14,8 @@ import ROUTES from "../routers/ROUTES";
 import { Switch } from "@mui/material";
 import RegisterFieldComponent from "../components/Register/RegisterFieldComponent";
 import { toast } from "react-toastify";
-import RegisterButtonsComponent from "../components/FormButtonsComponent";
+// import RegisterButtonsComponent from "../components/FormButtonsComponent";
+import FormButtonsComponent from "../components/FormButtonsComponent";
 const RegisterPage = () => {
   const [disableState, setDisable] = useState(true);
   const [isBizState, setIsBiz] = useState(false);
@@ -64,21 +65,26 @@ const RegisterPage = () => {
         toast.error("Invalid Details, correct your mistakes!");
         return;
       }
+      let newInputState = JSON.parse(JSON.stringify(inputState));
+      //!   bug on server - server required a zip code to be at least 1, without letting it be unrequired
+      if (!newInputState.zipCode) {
+        newInputState.zipCode = 1;
+      }
       await axios.post("/users/register", {
-        firstName: inputState.firstName,
-        middleName: inputState.middleName,
-        lastName: inputState.lastName,
-        phone: inputState.phone,
-        email: inputState.email,
-        password: inputState.password,
-        imageUrl: inputState.imageUrl,
-        imageAlt: inputState.imageAlt,
-        state: inputState.state,
-        country: inputState.country,
-        city: inputState.city,
-        street: inputState.street,
-        houseNumber: inputState.houseNumber,
-        zipCode: inputState.zipCode,
+        firstName: newInputState.firstName,
+        middleName: newInputState.middleName,
+        lastName: newInputState.lastName,
+        phone: newInputState.phone,
+        email: newInputState.email,
+        password: newInputState.password,
+        imageUrl: newInputState.imageUrl,
+        imageAlt: newInputState.imageAlt,
+        state: newInputState.state,
+        country: newInputState.country,
+        city: newInputState.city,
+        street: newInputState.street,
+        houseNumber: newInputState.houseNumber,
+        zipCode: newInputState.zipCode,
         biz: isBizState,
       });
       navigate(ROUTES.LOGIN);
@@ -162,7 +168,7 @@ const RegisterPage = () => {
             ))}
             <Switch checked={isBizState} onChange={handleBizChange} />
           </Grid>
-          <RegisterButtonsComponent
+          <FormButtonsComponent
             onCancel={handleCancelBtnClick}
             onReset={handleResetBtnClick}
             onRegister={handleBtnClick}

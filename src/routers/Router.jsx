@@ -20,6 +20,7 @@ import EditCardPage from "../pages/EditCardPage";
 import CreateCardPage from "../pages/CreateCardPage";
 import CardPage from "../pages/CardPage";
 import MyCardsPage from "../pages/MyCardsPage";
+import CRMPage from "../pages/CRMPage";
 
 const Router = () => {
   return (
@@ -103,6 +104,16 @@ const Router = () => {
             isAdmin={false}
             isBiz={true}
             element={<CreateCardPage />}
+          />
+        }
+      />
+      <Route
+        path={ROUTES.CRM}
+        element={
+          <SuperProtectedRoute
+            isAdmin={true}
+            isBiz={false}
+            element={<CRMPage />}
           />
         }
       />

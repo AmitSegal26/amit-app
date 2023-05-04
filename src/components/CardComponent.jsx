@@ -34,11 +34,12 @@ const CardComponent = ({
   onDelete,
   onEdit,
   onLike,
-  canEdit = false,
-  canDelete = false,
-  canLike = false,
+  canEdit,
+  canDelete,
+  canLike,
   isLiked,
   likesArrayOfUsers,
+  isTheUsersCard,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -67,6 +68,16 @@ const CardComponent = ({
           height="200vh"
         />
       </CardActionArea>
+      {isTheUsersCard ? (
+        <Typography component="h4" variant="h6" color="gold">
+          Your Card &#127775;
+        </Typography>
+      ) : (
+        <Typography component="h4" variant="h6">
+          {" "}
+          &#8192;
+        </Typography>
+      )}
       <CardHeader title={title} subheader={subTitle}></CardHeader>
       <Divider variant="middle" />
       <CardContent>
@@ -157,6 +168,8 @@ CardComponent.defaultProps = {
   bizNumber: "Business Number Is Not Available",
   canEdit: false,
   canDelete: false,
+  canLike: false,
+  isTheUsersCard: false,
 };
 
 export default CardComponent;

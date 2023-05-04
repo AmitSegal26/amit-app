@@ -7,6 +7,7 @@ const FormButtonsComponent = ({
   onRegister,
   clickBtnText,
   disableProp,
+  disableAll,
 }) => {
   const handleCancelBtnClick = () => {
     onCancel();
@@ -27,6 +28,7 @@ const FormButtonsComponent = ({
             sx={{ mt: 3, mb: 2 }}
             onClick={handleCancelBtnClick}
             color="error"
+            disabled={disableAll}
           >
             Cancel
           </Button>
@@ -38,6 +40,7 @@ const FormButtonsComponent = ({
             sx={{ mt: 3, mb: 2 }}
             onClick={handleResetBtnClick}
             color="info"
+            disabled={disableAll}
           >
             <AutorenewOutlinedIcon />
           </Button>
@@ -55,6 +58,9 @@ const FormButtonsComponent = ({
       </Button>
     </Fragment>
   );
+};
+FormButtonsComponent.defaultProps = {
+  disableAll: false,
 };
 
 export default FormButtonsComponent;

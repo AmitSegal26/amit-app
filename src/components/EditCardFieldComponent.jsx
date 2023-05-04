@@ -8,6 +8,7 @@ const EditCardFieldComponent = ({
   inputChange,
   inputErrors,
   isRequired,
+  disabledProp,
 }) => {
   const onInputChange = (ev) => {
     inputChange(ev);
@@ -23,6 +24,7 @@ const EditCardFieldComponent = ({
         autoComplete={inputType}
         value={inputValue ? inputValue : ""}
         onChange={onInputChange}
+        disabled={disabledProp}
       />
       {inputErrors && inputErrors[inputType] && (
         <Alert severity="warning">
@@ -33,6 +35,10 @@ const EditCardFieldComponent = ({
       )}
     </Grid>
   );
+};
+
+EditCardFieldComponent.defaultProps = {
+  disabledProp: false,
 };
 
 export default EditCardFieldComponent;

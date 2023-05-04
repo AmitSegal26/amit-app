@@ -1,14 +1,11 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { PropTypes } from "@mui/material";
 
 import ROUTES from "../routers/ROUTES";
 import { toast } from "react-toastify";
 
-const ProtectedRoute = ({
-  element,
-  supposedToBeLoggedInThis = true,
-  isLogOut = false,
-}) => {
+const ProtectedRoute = ({ element, supposedToBeLoggedInThis, isLogOut }) => {
   //* logic section
   const isLoggedIn = useSelector((bigState) => bigState.authSlice.isLoggedIn);
   //* html section
@@ -33,4 +30,9 @@ const ProtectedRoute = ({
     }
   }
 };
+ProtectedRoute.defaultProps = {
+  supposedToBeLoggedInThis: true,
+  isLogOut: false,
+};
+
 export default ProtectedRoute;

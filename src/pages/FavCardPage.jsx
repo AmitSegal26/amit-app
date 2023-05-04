@@ -117,6 +117,7 @@ const FavCardPage = () => {
               canLike={payload}
               isLiked={payload && card.likes.includes(payload._id)}
               likesArrayOfUsers={card.likes}
+              isTheUsersCard={payload && payload._id === card.user_id}
             />
           </Grid>
         ))}

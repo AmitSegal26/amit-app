@@ -12,6 +12,7 @@ const ROUTES = {
   CREATE: "/create",
   CREATE2: "/createcard",
   SPECIFICCARDPAGE: "/card/",
+  CRM: "/crm",
 };
 
 export default ROUTES;

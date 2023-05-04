@@ -166,6 +166,7 @@ const HomePage = () => {
               canLike={payload}
               isLiked={payload && item.likes.includes(payload._id)}
               likesArrayOfUsers={item.likes}
+              isTheUsersCard={payload && payload._id === item.user_id}
             />
           </Grid>
         ))}

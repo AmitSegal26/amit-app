@@ -1,13 +1,12 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import {
-  Avatar,
   Box,
   Button,
   CircularProgress,
   Container,
-  Divider,
   Grid,
   Link,
+  TextField,
   Typography,
 } from "@mui/material";
 import ROUTES from "../routers/ROUTES";
@@ -16,15 +15,21 @@ import { validateEditCardParamsSchema } from "../validations/editValidation";
 import axios from "axios";
 import { toast } from "react-toastify";
 import atom from "../logo.svg";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
 import { useSelector } from "react-redux";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-
+import EditIcon from "@mui/icons-material/Edit";
+import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CardBackButton from "../components/CardPage/CardBackButton";
+import CardTitles from "../components/CardPage/CardTitles";
 const CardPage = () => {
   const { id } = useParams();
-  const [cardState, setCardState] = useState(null);
   const navigate = useNavigate();
+  const [cardState, setCardState] = useState(null);
+  const [disableEditBizNumber, setDisableEditBizNumber] = useState(true);
+  const [bizNumberState, setBizNumberState] = useState(null);
   const { page } = useSelector((bigRedux) => bigRedux.prevPageSlice);
+  const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
   let whereTo = ROUTES.HOME;
   useEffect(() => {
     (async () => {
@@ -52,7 +57,6 @@ const CardPage = () => {
 
         delete newcardState.image;
         delete newcardState.__v;
-        delete newcardState._id;
         delete newcardState.user_id;
 
         if (!newcardState.zipCode || newcardState.zipCode <= 1) {
@@ -65,6 +69,9 @@ const CardPage = () => {
           newcardState.createdAt
         ).toLocaleDateString("hi");
         setCardState(newcardState);
+        setBizNumberState(newcardState.bizNumber);
+        console.log("DONE BOSS: " + newcardState.bizNumber);
+        console.log("DONE BOSS: " + bizNumberState);
       } catch (err) {
         toast.error(err);
       }
@@ -86,44 +93,36 @@ const CardPage = () => {
     return <CircularProgress />;
   }
   let cardKeys = Object.keys(cardState);
+  const handleEditBizField = () => {
+    setDisableEditBizNumber(!disableEditBizNumber);
+  };
+  const handleBizInputChange = (ev) => {
+    let newInputState = bizNumberState;
+    const regex = new RegExp("^\\d+$", "g");
+    if (!regex.test(ev.target.value)) {
+      toast.error("can only type numbers! between 1M-10M");
+      ev.target.value = bizNumberState;
+      return;
+    }
+    newInputState = +ev.target.value;
+    setBizNumberState(newInputState);
+  };
+  const handleSaveBizChanges = async () => {
+    try {
+      let { data } = await axios.put(
+        "/cards/bizNumber/" + cardState._id,
+        bizNumberState
+      );
+      console.log("data", data);
+    } catch (err) {
+      console.log("ERR", err.response.data);
+    }
+  };
   return (
     <Container component="main" maxWidth="xl">
       <br />
-      <Grid container>
-        <Grid item sm={3}>
-          <Button variant="outlined" onClick={handleCancelBtnClick}>
-            <FirstPageIcon />
-            Back to{" "}
-            {whereTo == ROUTES.MYCARDS
-              ? "Your Cards"
-              : whereTo == ROUTES.FAVCARDS
-              ? "Your Favorite Cards"
-              : "Home"}
-          </Button>
-        </Grid>
-      </Grid>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography align="center" component="h1" variant="h3">
-          Card Page:
-        </Typography>
-        <Box
-          component="img"
-          sx={{
-            height: 233,
-            width: 350,
-            maxHeight: { xs: 600, md: 600 },
-            maxWidth: { xs: 600, md: 600 },
-          }}
-          alt={cardState.alt ? cardState.alt : ""}
-          src={cardState.url ? cardState.url : atom}
-        />
-      </Box>
+      <CardBackButton whereToVar={whereTo} onBackClick={handleCancelBtnClick} />
+      <CardTitles cardStateProp={cardState} atomProp={atom} />
       <Box
         sx={{
           display: "flex",
@@ -137,19 +136,15 @@ const CardPage = () => {
              but without deleting them as a property so the image will not be damaged*/}
             {cardKeys.map((propOfCard) =>
               propOfCard !== "url" && propOfCard !== "alt" ? (
-                <Grid
-                  key={propOfCard}
-                  item
-                  sx={{ maxWidth: "15rem" }}
-                  xs={12}
-                  // sm={12}
-                  // md={6}
-                  // xl={4}
-                >
+                <Grid key={propOfCard} item sx={{ maxWidth: "15rem" }} xs={12}>
                   <Typography variant="h6" gutterBottom color="white">
-                    <Button color="info" variant="outlined" disabled>
-                      {propOfCard}
-                    </Button>{" "}
+                    {propOfCard === "_id" ? (
+                      ""
+                    ) : (
+                      <Button color="info" variant="outlined" disabled>
+                        {propOfCard}
+                      </Button>
+                    )}{" "}
                     {propOfCard == "web" ? (
                       <Link
                         href={cardState.web}
@@ -163,6 +158,44 @@ const CardPage = () => {
                         {cardState.likes.length}
                         <FavoriteBorderIcon sx={{ ml: 1 }} color="error" />
                       </Fragment>
+                    ) : propOfCard == "bizNumber" &&
+                      payload &&
+                      payload.isAdmin ? (
+                      <Fragment>
+                        <TextField
+                          value={bizNumberState}
+                          onChange={handleBizInputChange}
+                          disabled={disableEditBizNumber}
+                          variant="standard"
+                          InputProps={{
+                            disableUnderline: disableEditBizNumber,
+                          }}
+                        />
+                        {disableEditBizNumber ? (
+                          <Button color="warning" onClick={handleEditBizField}>
+                            <EditIcon sx={{ ml: 1 }} color="warning" />
+                            Edit Biz Number
+                          </Button>
+                        ) : (
+                          <Button color="error" onClick={handleEditBizField}>
+                            <CancelIcon sx={{ ml: 1 }} color="error" />
+                            Cancel
+                          </Button>
+                        )}
+                        {!disableEditBizNumber ? (
+                          <Button
+                            color="success"
+                            onClick={handleSaveBizChanges}
+                          >
+                            <DoneOutlineIcon sx={{ ml: 1 }} color="success" />
+                            Save Changes
+                          </Button>
+                        ) : (
+                          ""
+                        )}
+                      </Fragment>
+                    ) : propOfCard == "_id" ? (
+                      ""
                     ) : (
                       cardState[propOfCard]
                     )}
@@ -178,5 +211,4 @@ const CardPage = () => {
     </Container>
   );
 };
-
 export default CardPage;
