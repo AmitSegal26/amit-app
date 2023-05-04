@@ -26,7 +26,6 @@ const CardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [cardState, setCardState] = useState(null);
-  const [disableEditBizNumber, setDisableEditBizNumber] = useState(true);
   const [bizNumberState, setBizNumberState] = useState(null);
   const { page } = useSelector((bigRedux) => bigRedux.prevPageSlice);
   const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
@@ -70,8 +69,6 @@ const CardPage = () => {
         ).toLocaleDateString("hi");
         setCardState(newcardState);
         setBizNumberState(newcardState.bizNumber);
-        console.log("DONE BOSS: " + newcardState.bizNumber);
-        console.log("DONE BOSS: " + bizNumberState);
       } catch (err) {
         toast.error(err);
       }
@@ -93,27 +90,17 @@ const CardPage = () => {
     return <CircularProgress />;
   }
   let cardKeys = Object.keys(cardState);
-  const handleEditBizField = () => {
-    setDisableEditBizNumber(!disableEditBizNumber);
-  };
-  const handleBizInputChange = (ev) => {
-    let newInputState = bizNumberState;
-    const regex = new RegExp("^\\d+$", "g");
-    if (!regex.test(ev.target.value)) {
-      toast.error("can only type numbers! between 1M-10M");
-      ev.target.value = bizNumberState;
-      return;
-    }
-    newInputState = +ev.target.value;
-    setBizNumberState(newInputState);
-  };
+  //* BONUS - let the admin change the business number
   const handleSaveBizChanges = async () => {
     try {
-      let { data } = await axios.put(
-        "/cards/bizNumber/" + cardState._id,
-        bizNumberState
+      await axios.patch("/cards/bizNumber/" + cardState._id);
+      //  this command was in order to update the state.
+      //! there's a bug at the server which returns the same card without changes
+      //!after patching the new bizNumber
+      let { data: relavantCard } = await axios.get(
+        "/cards/card/" + cardState._id
       );
-      console.log("data", data);
+      setBizNumberState(relavantCard.bizNumber);
     } catch (err) {
       console.log("ERR", err.response.data);
     }
@@ -162,37 +149,11 @@ const CardPage = () => {
                       payload &&
                       payload.isAdmin ? (
                       <Fragment>
-                        <TextField
-                          value={bizNumberState}
-                          onChange={handleBizInputChange}
-                          disabled={disableEditBizNumber}
-                          variant="standard"
-                          InputProps={{
-                            disableUnderline: disableEditBizNumber,
-                          }}
-                        />
-                        {disableEditBizNumber ? (
-                          <Button color="warning" onClick={handleEditBizField}>
-                            <EditIcon sx={{ ml: 1 }} color="warning" />
-                            Edit Biz Number
-                          </Button>
-                        ) : (
-                          <Button color="error" onClick={handleEditBizField}>
-                            <CancelIcon sx={{ ml: 1 }} color="error" />
-                            Cancel
-                          </Button>
-                        )}
-                        {!disableEditBizNumber ? (
-                          <Button
-                            color="success"
-                            onClick={handleSaveBizChanges}
-                          >
-                            <DoneOutlineIcon sx={{ ml: 1 }} color="success" />
-                            Save Changes
-                          </Button>
-                        ) : (
-                          ""
-                        )}
+                        {bizNumberState ? bizNumberState : cardState.bizNumber}
+                        <Button color="success" onClick={handleSaveBizChanges}>
+                          <EditIcon sx={{ ml: 1 }} color="warning" />
+                          Edit The Business Number
+                        </Button>
                       </Fragment>
                     ) : propOfCard == "_id" ? (
                       ""
