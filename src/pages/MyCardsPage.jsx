@@ -9,19 +9,22 @@ import { prevPageActions } from "../store/whereFrom";
 import ROUTES from "../routers/ROUTES";
 import AddIcon from "@mui/icons-material/Add";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import useQueryParams from "../hooks/useQueryParams";
 
 const MyCardsPage = () => {
+  const [originalCardsArr, setOriginalCardsArr] = useState(null);
   const [cardsArr, setCardsArr] = useState(null);
   const [userState, setuserState] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  let qparams = useQueryParams();
   const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
 
   useEffect(() => {
     axios
       .get("/cards/my-cards")
       .then(({ data }) => {
-        setCardsArr(data);
+        filterFunc(data);
       })
       .catch((err) => {
         // toast.error(err.response.data);
@@ -35,6 +38,51 @@ const MyCardsPage = () => {
         toast.error(err.response.data);
       });
   }, []);
+  const filterFunc = (data) => {
+    if (!originalCardsArr && !data) {
+      return;
+    }
+    let filter = "";
+    if (qparams.filter) {
+      filter = qparams.filter;
+    }
+    if (!originalCardsArr && data) {
+      /*
+        when component loaded and states not loaded
+      */
+      setOriginalCardsArr(data);
+      const regex = new RegExp("^\\d+$", "g");
+      if (regex.test(filter)) {
+        filter = +filter;
+        setCardsArr(data.filter((card) => card.bizNumber.startsWith(filter)));
+      } else {
+        setCardsArr(data.filter((card) => card.title.startsWith(filter)));
+      }
+    }
+    if (originalCardsArr) {
+      /*
+        when all loaded and states loaded
+      */
+      let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
+      const regex = new RegExp("^\\d+$", "g");
+
+      if (regex.test(filter)) {
+        filter = +filter;
+        setCardsArr(
+          newOriginalCardsArr.filter((card) =>
+            card.bizNumber.startsWith(filter)
+          )
+        );
+      } else {
+        setCardsArr(
+          newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
+        );
+      }
+    }
+  };
+  useEffect(() => {
+    filterFunc();
+  }, [qparams.filter]);
 
   const addRemoveToLikesArray = async (id) => {
     try {

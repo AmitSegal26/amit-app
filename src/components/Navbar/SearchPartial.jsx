@@ -55,7 +55,19 @@ const SearchPartial = () => {
   };
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    navigate(`${ROUTES.HOME}?filter=${searchInput}`);
+    let {
+      location: { href },
+    } = window;
+    if (href.includes(`${ROUTES.FAVCARDS}`)) {
+      href = ROUTES.FAVCARDS;
+    } else if (href.includes(`${ROUTES.MYCARDS}`)) {
+      href = ROUTES.MYCARDS;
+    } else if (href.includes(`${ROUTES.CRM}`)) {
+      href = ROUTES.CRM;
+    } else {
+      href = ROUTES.HOME;
+    }
+    navigate(`${href}?filter=${searchInput}`);
   };
   return (
     <form onSubmit={handleSearchSubmit}>

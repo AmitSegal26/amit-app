@@ -20,7 +20,7 @@ const createCardSchema = Joi.object({
     .required(),
   web: Joi.string().min(5).max(255).allow(""),
   url: Joi.string().min(6).max(1024).allow(""),
-  alt: Joi.string().min(2).max(256).allow(""),
+  alt: Joi.string().min(6).max(256).allow(""),
 });
 
 const validateCreateSchema = (userInput) =>

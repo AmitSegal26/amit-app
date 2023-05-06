@@ -13,32 +13,26 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import ProfilePageBtnsAndLinks from "../components/Profile/ProfilePageBtnsAndLinks";
 import validateProfileParamSchema from "../validations/profileParamEditBizSchema";
 import CloseIcon from "@mui/icons-material/Close";
 const ProfileDataPage = () => {
   const { id } = useParams();
   const [isBizState, setIsBiz] = useState(false);
   const [profileState, setProfileState] = useState(null);
+  const [usersArr, setUsersArr] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     let joiResponse = validateProfileParamSchema(id);
-    console.log(
-      "🚀 ~ file: ProfileDataPage.jsx:20 ~ useEffect ~ joiResponse:",
-      joiResponse
-    );
-    console.log(id);
     if (joiResponse) {
       //   navigate(ROUTES.CRM);
-      toast.error("something went wrong. try again later");
+      //   toast.error("something went wrong. try again later");
       //   return;
     }
     axios
       .get("/users/getAllUsers")
       .then(({ data: { users } }) => {
-        console.log(users);
         let currentProfile = { ...users.find((user) => user._id == id) };
+        setUsersArr(users);
         delete currentProfile._id;
         delete currentProfile.__v;
         currentProfile.createdAt = new Date(
@@ -52,22 +46,58 @@ const ProfileDataPage = () => {
           currentProfile.imageAlt =
             "This is the profile picture of " + currentProfile.firstName;
         }
+        if (!currentProfile.state) {
+          delete currentProfile.state;
+        }
+        if (!currentProfile.middleName) {
+          delete currentProfile.middleName;
+        }
 
         if (!currentProfile.zipCode || currentProfile.zipCode <= 1) {
           delete currentProfile.zipCode;
         }
         setIsBiz(currentProfile.biz);
         setProfileState(currentProfile);
+        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
       })
       .catch((err) => {
-        console.log("ERR", err);
+        toast.error("ERR", err.response.data);
       });
   }, [id]);
   const handleTopClick = (ev) => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
-  const handleBizChange = (ev) => {
-    setIsBiz(ev.target.checked);
+  const handleBizChange = async (ev) => {
+    try {
+      let newUsersArr = JSON.parse(JSON.stringify(usersArr));
+      let currentUser = newUsersArr.find((user) => user._id == id);
+      await axios.put("/users/userInfo/" + currentUser._id, {
+        firstName: currentUser.firstName,
+        middleName: currentUser.middleName,
+        lastName: currentUser.lastName,
+        phone: currentUser.phone,
+        email: currentUser.email,
+        imageUrl: currentUser.imageUrl,
+        imageAlt: currentUser.imageAlt,
+        state: currentUser.state,
+        country: currentUser.country,
+        city: currentUser.city,
+        street: currentUser.street,
+        houseNumber: currentUser.houseNumber,
+        zipCode: currentUser.zipCode,
+        biz: !currentUser.biz,
+      });
+      currentUser.biz = !currentUser.biz;
+      newUsersArr.map((user) => {
+        if (user._id == currentUser._id) {
+          user = { ...currentUser };
+        }
+      });
+      setIsBiz(currentUser.biz);
+    } catch (err) {
+      // toast.error("ERR" + err);
+      console.log("ERR", err);
+    }
   };
   const handleBackToCRMClick = () => {
     navigate(ROUTES.CRM);
@@ -76,16 +106,16 @@ const ProfileDataPage = () => {
     return <CircularProgress />;
   }
   let profileKeys = Object.keys(profileState);
-  console.log(profileState);
   return (
     <Container
       style={{ backgroundColor: "#000044" }}
       component="main"
-      maxWidth="md"
+      maxWidth="lg"
     >
       <Button onClick={handleBackToCRMClick} color="error" variant="contained">
         <CloseIcon />
       </Button>
+      <h1 style={{ margin: -3 }}>Profile Details:</h1>
       <Box
         sx={{
           display: "flex",
@@ -107,7 +137,11 @@ const ProfileDataPage = () => {
                   ""
                 ) : (
                   <Fragment>
-                    <Typography component="h5" variant="h5">
+                    <Typography
+                      style={{ backgroundColor: "#00002b" }}
+                      component="h5"
+                      variant="h5"
+                    >
                       {key == "isAdmin" || key == "biz"
                         ? profileState[key]
                           ? `${key}: yes`
@@ -120,10 +154,10 @@ const ProfileDataPage = () => {
               </Grid>
             ))}
           </Grid>
-          Business Account:{" "}
-          <Switch checked={isBizState} onChange={handleBizChange} />
+          <Divider />
           <Button
-            onClick={handleTopClick}
+            sx={{ m: 2 }}
+            onChange={handleTopClick}
             color="secondary"
             variant="contained"
           >

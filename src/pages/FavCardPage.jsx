@@ -8,21 +8,25 @@ import { useDispatch, useSelector } from "react-redux";
 // import { addToLikesArray } from "../services/addToLikes";
 import { toast } from "react-toastify";
 import { prevPageActions } from "../store/whereFrom";
+import useQueryParams from "../hooks/useQueryParams";
 
 const FavCardPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  let qparams = useQueryParams();
+  const [originalCardsArr, setOriginalCardsArr] = useState(null);
   const [likedCardsArrState, setLikedCardsArrState] = useState(null);
   const [originalLikedCardsArrState, setOriginalLikedCardsArrState] =
     useState(null);
   const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
+  let found = false;
   // let arrOfCardLiked = [];
   useEffect(() => {
     axios
       .get("/cards/get-my-fav-cards")
       .then(({ data }) => {
         setOriginalLikedCardsArrState(data);
-        setLikedCardsArrState(data);
+        filterFunc(data);
       })
       .catch((err) => {});
   }, []);
@@ -34,6 +38,76 @@ const FavCardPage = () => {
       })
       .catch((err) => {});
   }, [originalLikedCardsArrState]);
+  const filterFunc = (data) => {
+    if (!originalCardsArr && !data) {
+      return;
+    }
+    let filter = "";
+    if (qparams.filter) {
+      filter = qparams.filter;
+    }
+    console.log("filter", filter);
+    if (!originalCardsArr && data) {
+      /*
+        when component loaded and states not loaded
+      */
+      setOriginalCardsArr(data);
+      const regex = new RegExp("^\\d+$", "g");
+      if (regex.test(filter)) {
+        filter = +filter;
+        setLikedCardsArrState(
+          data.filter((card) => card.bizNumber.startsWith(filter))
+        );
+        console.log(
+          "data1 component loaded BizMode",
+          data.filter((card) => card.bizNumber.startsWith(filter))
+        );
+      } else {
+        setLikedCardsArrState(
+          data.filter((card) => card.title.startsWith(filter))
+        );
+
+        console.log(
+          "data1 component loaded",
+          data.filter((card) => card.title.startsWith(filter))
+        );
+      }
+    }
+    if (originalCardsArr) {
+      /*
+        when all loaded and states loaded
+      */
+      let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
+      const regex = new RegExp("^\\d+$", "g");
+
+      if (regex.test(filter)) {
+        filter = +filter;
+        setLikedCardsArrState(
+          newOriginalCardsArr.filter((card) =>
+            card.bizNumber.startsWith(filter)
+          )
+        );
+        console.log(
+          "newOriginal all loded BizMode",
+          newOriginalCardsArr.filter((card) =>
+            card.bizNumber.startsWith(filter)
+          )
+        );
+      } else {
+        setLikedCardsArrState(
+          newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
+        );
+        console.log(
+          "newOriginal all loded",
+          newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
+        );
+      }
+    }
+  };
+  useEffect(() => {
+    console.log("changes");
+    filterFunc();
+  }, [qparams.filter]);
   const addRemoveToLikesArray = async (id) => {
     try {
       let { data } = await axios.patch("/cards/card-like/" + id);
