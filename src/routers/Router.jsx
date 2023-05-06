@@ -21,6 +21,7 @@ import CreateCardPage from "../pages/CreateCardPage";
 import CardPage from "../pages/CardPage";
 import MyCardsPage from "../pages/MyCardsPage";
 import CRMPage from "../pages/CRMPage";
+import ProfileDataPage from "../pages/ProfileDataPage";
 
 const Router = () => {
   return (
@@ -116,7 +117,18 @@ const Router = () => {
             element={<CRMPage />}
           />
         }
-      />
+      >
+        <Route
+          path=":id"
+          element={
+            <SuperProtectedRoute
+              isAdmin={true}
+              isBiz={false}
+              element={<ProfileDataPage />}
+            />
+          }
+        />
+      </Route>
       <Route
         path={ROUTES.MYCARDS}
         element={

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -6,7 +6,6 @@ import {
   Container,
   Grid,
   Link,
-  TextField,
   Typography,
 } from "@mui/material";
 import ROUTES from "../routers/ROUTES";
@@ -18,10 +17,9 @@ import atom from "../logo.svg";
 import { useSelector } from "react-redux";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
-import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
-import CancelIcon from "@mui/icons-material/Cancel";
 import CardBackButton from "../components/CardPage/CardBackButton";
 import CardTitles from "../components/CardPage/CardTitles";
+import AlertDialog from "../components/DialogComponent";
 const CardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -150,7 +148,10 @@ const CardPage = () => {
                       payload.isAdmin ? (
                       <Fragment>
                         {bizNumberState ? bizNumberState : cardState.bizNumber}
-                        <Button color="success" onClick={handleSaveBizChanges}>
+                        <AlertDialog
+                          onBtnChangeBizNumberClick={handleSaveBizChanges}
+                        />
+                        <Button color="success" onClick={() => {}}>
                           <EditIcon sx={{ ml: 1 }} color="warning" />
                           Edit The Business Number
                         </Button>

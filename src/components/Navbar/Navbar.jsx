@@ -72,6 +72,10 @@ const adminPages = [
     label: "Sandbox",
     url: ROUTES.SANDBOX,
   },
+  {
+    label: "CRM System",
+    url: ROUTES.CRM,
+  },
 ];
 
 const Navbar = () => {
