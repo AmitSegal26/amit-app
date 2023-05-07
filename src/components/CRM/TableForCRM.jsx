@@ -60,7 +60,7 @@ const TableForCRM = ({
                       }}
                     >
                       <Button id={user._id} onClick={handleSeeProfileClickFunc}>
-                        More Details{<OpenInFullIcon />}
+                        More Details{<OpenInFullIcon id={user._id} />}
                       </Button>
                       {!user.isAdmin ? (
                         <Fragment>
@@ -104,7 +104,7 @@ const TableForCRM = ({
                           onClick={handleSeeProfileClickFunc}
                           style={{ m: 1 }}
                         >
-                          More Details{<OpenInFullIcon />}
+                          More Details{<OpenInFullIcon id={user._id} />}
                         </Button>
                       </Grid>
                       {!user.isAdmin ? (

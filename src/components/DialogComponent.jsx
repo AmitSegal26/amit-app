@@ -5,9 +5,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import EditIcon from "@mui/icons-material/Edit";
 
-const AlertDialog = ({ onBtnChangeBizNumberClick }) => {
-  const [open, setOpen] = React.useState(false);
+const AlertDialog = ({ onBtnChangeBizNumberClick, openOrNot }) => {
+  const [open, setOpen] = React.useState(openOrNot);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,8 +24,9 @@ const AlertDialog = ({ onBtnChangeBizNumberClick }) => {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
+      <Button color="success" onClick={handleClickOpen}>
+        <EditIcon sx={{ ml: 1 }} color="warning" />
+        Edit The Business Number
       </Button>
       <Dialog
         open={open}
@@ -50,6 +52,10 @@ const AlertDialog = ({ onBtnChangeBizNumberClick }) => {
       </Dialog>
     </div>
   );
+};
+
+AlertDialog.defaultProps = {
+  openOrNot: false,
 };
 
 export default AlertDialog;

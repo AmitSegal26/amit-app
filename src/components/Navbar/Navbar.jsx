@@ -60,10 +60,6 @@ const bizPages = [
     label: "My Cards",
     url: ROUTES.MYCARDS,
   },
-  {
-    label: "Create New Card",
-    url: ROUTES.CREATE,
-  },
 ];
 
 //admin pages

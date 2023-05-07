@@ -16,7 +16,6 @@ import { toast } from "react-toastify";
 import atom from "../logo.svg";
 import { useSelector } from "react-redux";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import EditIcon from "@mui/icons-material/Edit";
 import CardBackButton from "../components/CardPage/CardBackButton";
 import CardTitles from "../components/CardPage/CardTitles";
 import AlertDialog from "../components/DialogComponent";
@@ -150,11 +149,8 @@ const CardPage = () => {
                         {bizNumberState ? bizNumberState : cardState.bizNumber}
                         <AlertDialog
                           onBtnChangeBizNumberClick={handleSaveBizChanges}
+                          openOrNot={true}
                         />
-                        <Button color="success" onClick={() => {}}>
-                          <EditIcon sx={{ ml: 1 }} color="warning" />
-                          Edit The Business Number
-                        </Button>
                       </Fragment>
                     ) : propOfCard == "_id" ? (
                       ""

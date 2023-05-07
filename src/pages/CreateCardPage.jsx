@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import EditIcon from "@mui/icons-material/Edit";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ROUTES from "../routers/ROUTES";
@@ -99,10 +99,10 @@ const CreateCardPage = () => {
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <EditIcon />
+          <PostAddIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Edit card
+          Create Card
         </Typography>
         <Box
           component="img"

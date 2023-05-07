@@ -1,23 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
-import {
-  Table,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableContainer,
-  Paper,
-  Button,
-  Avatar,
-  Box,
-  Grid,
-} from "@mui/material";
 import { toast } from "react-toastify";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Outlet, useNavigate } from "react-router-dom";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import TableForCRM from "../components/CRM/TableForCRM";
 import ROUTES from "../routers/ROUTES";
 const CRMPage = () => {
@@ -92,7 +76,8 @@ const CRMPage = () => {
 
   return (
     <Fragment>
-      {window.location.href.endsWith("/crm") ? (
+      {window.location.href.endsWith("/crm") ||
+      window.location.href.endsWith("/crm/") ? (
         <Fragment>
           <h1>Customer Relationship Management (CRM)</h1>
           <h3>
