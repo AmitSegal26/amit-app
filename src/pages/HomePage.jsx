@@ -25,14 +25,9 @@ const HomePage = () => {
   const { payload } = useSelector((bigPie) => bigPie.authSlice);
 
   useEffect(() => {
-    /*
-      useEffect cant handle async ()=>{}
-      this is why we use the old promise way
-    */
     axios
       .get("/cards/cards")
       .then(({ data }) => {
-        // setCardsArr(data);
         filterFunc(data);
       })
       .catch((err) => {

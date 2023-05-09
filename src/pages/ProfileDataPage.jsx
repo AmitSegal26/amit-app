@@ -17,16 +17,15 @@ import validateProfileParamSchema from "../validations/profileParamEditBizSchema
 import CloseIcon from "@mui/icons-material/Close";
 const ProfileDataPage = () => {
   const { id } = useParams();
-  const [isBizState, setIsBiz] = useState(false);
   const [profileState, setProfileState] = useState(null);
   const [usersArr, setUsersArr] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
-    let joiResponse = validateProfileParamSchema(id);
+    let joiResponse = validateProfileParamSchema({ id });
     if (joiResponse) {
-      //   navigate(ROUTES.CRM);
-      //   toast.error("something went wrong. try again later");
-      //   return;
+      navigate(ROUTES.CRM);
+      toast.error("something went wrong. try again later");
+      return;
     }
     axios
       .get("/users/getAllUsers")
@@ -56,7 +55,6 @@ const ProfileDataPage = () => {
         if (!currentProfile.zipCode || currentProfile.zipCode <= 1) {
           delete currentProfile.zipCode;
         }
-        setIsBiz(currentProfile.biz);
         setProfileState(currentProfile);
         window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
       })
@@ -64,41 +62,6 @@ const ProfileDataPage = () => {
         toast.error("ERR", err.response.data);
       });
   }, [id]);
-  const handleTopClick = (ev) => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  };
-  const handleBizChange = async (ev) => {
-    try {
-      let newUsersArr = JSON.parse(JSON.stringify(usersArr));
-      let currentUser = newUsersArr.find((user) => user._id == id);
-      await axios.put("/users/userInfo/" + currentUser._id, {
-        firstName: currentUser.firstName,
-        middleName: currentUser.middleName,
-        lastName: currentUser.lastName,
-        phone: currentUser.phone,
-        email: currentUser.email,
-        imageUrl: currentUser.imageUrl,
-        imageAlt: currentUser.imageAlt,
-        state: currentUser.state,
-        country: currentUser.country,
-        city: currentUser.city,
-        street: currentUser.street,
-        houseNumber: currentUser.houseNumber,
-        zipCode: currentUser.zipCode,
-        biz: !currentUser.biz,
-      });
-      currentUser.biz = !currentUser.biz;
-      newUsersArr.map((user) => {
-        if (user._id == currentUser._id) {
-          user = { ...currentUser };
-        }
-      });
-      setIsBiz(currentUser.biz);
-    } catch (err) {
-      // toast.error("ERR" + err);
-      console.log("ERR", err);
-    }
-  };
   const handleBackToCRMClick = () => {
     navigate(ROUTES.CRM);
   };
@@ -108,11 +71,20 @@ const ProfileDataPage = () => {
   let profileKeys = Object.keys(profileState);
   return (
     <Container
+      sx={{ pb: 2, mt: 0.5 }}
       style={{ backgroundColor: "#000044" }}
       component="main"
       maxWidth="lg"
     >
-      <Button onClick={handleBackToCRMClick} color="error" variant="contained">
+      <Button
+        onClick={handleBackToCRMClick}
+        style={{
+          backgroundColor: "#000044",
+          color: "#fff",
+          float: "right",
+        }}
+        variant="contained"
+      >
         <CloseIcon />
       </Button>
       <h1 style={{ margin: -3 }}>Profile Details:</h1>
@@ -138,7 +110,10 @@ const ProfileDataPage = () => {
                 ) : (
                   <Fragment>
                     <Typography
-                      style={{ backgroundColor: "#00002b" }}
+                      style={{
+                        backgroundColor: "#00002b",
+                        color: "white",
+                      }}
                       component="h5"
                       variant="h5"
                     >
@@ -154,15 +129,6 @@ const ProfileDataPage = () => {
               </Grid>
             ))}
           </Grid>
-          <Divider />
-          <Button
-            sx={{ m: 2 }}
-            onChange={handleTopClick}
-            color="secondary"
-            variant="contained"
-          >
-            CLICK TO SCROLL TO TOP
-          </Button>
         </Box>
       </Box>
     </Container>

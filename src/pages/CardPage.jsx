@@ -27,6 +27,10 @@ const CardPage = () => {
   const { page } = useSelector((bigRedux) => bigRedux.prevPageSlice);
   const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
   let whereTo = ROUTES.HOME;
+  const regex = new RegExp(
+    "(https?://(?:www.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9].[^s]{2,}|www.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9].[^s]{2,}|https?://(?:www.|(?!www))[a-zA-Z0-9]+.[^s]{2,}|www.[a-zA-Z0-9]+.[^s]{2,})",
+    "gi"
+  );
   useEffect(() => {
     (async () => {
       try {
@@ -130,13 +134,23 @@ const CardPage = () => {
                       </Button>
                     )}{" "}
                     {propOfCard == "web" ? (
-                      <Link
-                        href={cardState.web}
-                        underline="hover"
-                        target="_blank"
-                      >
-                        {cardState.web}
-                      </Link>
+                      regex.test(cardState.web) ? (
+                        <Link
+                          href={cardState.web}
+                          underline="hover"
+                          target="_blank"
+                        >
+                          {cardState.web}
+                        </Link>
+                      ) : (
+                        <Fragment>
+                          {cardState.web}
+                          <span style={{ color: "red" }}>
+                            <br /> [Auto-Link was not available for this
+                            address]
+                          </span>
+                        </Fragment>
+                      )
                     ) : propOfCard == "likes" ? (
                       <Fragment>
                         {cardState.likes.length}
@@ -149,7 +163,6 @@ const CardPage = () => {
                         {bizNumberState ? bizNumberState : cardState.bizNumber}
                         <AlertDialog
                           onBtnChangeBizNumberClick={handleSaveBizChanges}
-                          openOrNot={true}
                         />
                       </Fragment>
                     ) : propOfCard == "_id" ? (

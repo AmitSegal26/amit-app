@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 //toastify
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Footer from "./components/Footer";
 
 const light = {
   palette: {
@@ -60,9 +61,20 @@ function App() {
       <header>
         <Navbar />
       </header>
+      <br />
+      <br />
+      <br />
+      <br />
       <main>{isLoading ? <CircularProgress /> : <Router />}</main>
 
-      <footer></footer>
+      <footer>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <Footer />
+      </footer>
     </ThemeProvider>
   );
 }

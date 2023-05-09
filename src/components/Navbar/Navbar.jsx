@@ -105,7 +105,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar>
           <Link to={ROUTES.HOME}>

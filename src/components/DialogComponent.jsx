@@ -7,8 +7,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import EditIcon from "@mui/icons-material/Edit";
 
-const AlertDialog = ({ onBtnChangeBizNumberClick, openOrNot }) => {
-  const [open, setOpen] = React.useState(openOrNot);
+const AlertDialog = ({ onBtnChangeBizNumberClick }) => {
+  const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);

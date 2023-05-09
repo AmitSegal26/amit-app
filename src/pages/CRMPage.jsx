@@ -71,7 +71,7 @@ const CRMPage = () => {
   };
   const handleSeeProfileClick = (ev) => {
     let { id } = ev.target;
-    navigate(`/crm/${id}`); //localhost:3000/crm/XXX
+    navigate(`${ROUTES.CRM}/${id}`); //localhost:3000/crm/XXX
   };
 
   return (

@@ -2,7 +2,7 @@ import Joi from "joi";
 import validation from "./validation";
 
 const profileParamSchema = Joi.object({
-  id: Joi.string().min(1).max(25).required(),
+  id: Joi.string().length(24).required(),
 });
 
 const validateProfileParamSchema = (userInput) =>

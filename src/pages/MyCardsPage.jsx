@@ -3,7 +3,13 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Button, CircularProgress, Container, Grid } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  IconButton,
+} from "@mui/material";
 import CardComponent from "../components/CardComponent";
 import { prevPageActions } from "../store/whereFrom";
 import ROUTES from "../routers/ROUTES";
@@ -187,18 +193,26 @@ const MyCardsPage = () => {
       <Grid container spacing={3}>
         <Grid item xs={9} />
         <Grid item xs={3}>
-          <AddCircleIcon
-            onClick={handleCreateBtn}
-            color="primary"
-            style={{
-              width: "4rem",
-              height: "4rem",
-              cursor: "pointer",
+          <IconButton
+            sx={{
+              position: "fixed",
+              top: "80%",
+              left: { xs: "80%", sm: "85%", md: "90%" },
             }}
-            sx={{ position: "fixed", top: "85%", left: "90%" }}
-          />
+            onClick={handleCreateBtn}
+          >
+            <AddCircleIcon
+              color="primary"
+              style={{
+                width: "4rem",
+                height: "4rem",
+                cursor: "pointer",
+              }}
+            />
+          </IconButton>
         </Grid>
       </Grid>
+      <br />
     </Fragment>
   );
 };

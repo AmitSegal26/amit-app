@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { prevPageActions } from "../store/whereFrom";
 import useQueryParams from "../hooks/useQueryParams";
-
 const FavCardPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,8 +18,6 @@ const FavCardPage = () => {
   const [originalLikedCardsArrState, setOriginalLikedCardsArrState] =
     useState(null);
   const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
-  let found = false;
-  // let arrOfCardLiked = [];
   useEffect(() => {
     axios
       .get("/cards/get-my-fav-cards")
@@ -39,14 +36,15 @@ const FavCardPage = () => {
       .catch((err) => {});
   }, [originalLikedCardsArrState]);
   const filterFunc = (data) => {
+    console.log("ACTIVATED");
     if (!originalCardsArr && !data) {
       return;
     }
     let filter = "";
     if (qparams.filter) {
       filter = qparams.filter;
+      console.log("filter current", filter);
     }
-    console.log("filter", filter);
     if (!originalCardsArr && data) {
       /*
         when component loaded and states not loaded
@@ -58,17 +56,12 @@ const FavCardPage = () => {
         setLikedCardsArrState(
           data.filter((card) => card.bizNumber.startsWith(filter))
         );
-        console.log(
-          "data1 component loaded BizMode",
-          data.filter((card) => card.bizNumber.startsWith(filter))
-        );
       } else {
         setLikedCardsArrState(
           data.filter((card) => card.title.startsWith(filter))
         );
-
         console.log(
-          "data1 component loaded",
+          "state not loaded:",
           data.filter((card) => card.title.startsWith(filter))
         );
       }
@@ -79,16 +72,9 @@ const FavCardPage = () => {
       */
       let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
       const regex = new RegExp("^\\d+$", "g");
-
       if (regex.test(filter)) {
         filter = +filter;
         setLikedCardsArrState(
-          newOriginalCardsArr.filter((card) =>
-            card.bizNumber.startsWith(filter)
-          )
-        );
-        console.log(
-          "newOriginal all loded BizMode",
           newOriginalCardsArr.filter((card) =>
             card.bizNumber.startsWith(filter)
           )
@@ -98,7 +84,7 @@ const FavCardPage = () => {
           newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
         );
         console.log(
-          "newOriginal all loded",
+          "all loaded:",
           newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
         );
       }
@@ -199,5 +185,4 @@ const FavCardPage = () => {
     </Fragment>
   );
 };
-
 export default FavCardPage;

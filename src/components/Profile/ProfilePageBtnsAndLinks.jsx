@@ -27,7 +27,7 @@ const ProfilePageBtnsAndLinks = ({
   return (
     <Fragment>
       <Grid container>
-        <Grid item xl={12}>
+        <Grid item xs={12}>
           <Button
             color="warning"
             variant="outlined"
