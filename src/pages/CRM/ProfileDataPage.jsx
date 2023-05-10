@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import ROUTES from "../routers/ROUTES";
+import ROUTES from "../../routers/ROUTES";
 import {
   Button,
   CircularProgress,
@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import validateProfileParamSchema from "../validations/profileParamEditBizSchema";
+import validateProfileParamSchema from "../../validations/profileParamEditBizSchema";
 import CloseIcon from "@mui/icons-material/Close";
 const ProfileDataPage = () => {
   const { id } = useParams();

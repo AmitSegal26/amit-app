@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from "@mui/material";
 import React, { Fragment } from "react";
-import FormButtonsComponent from "../FormButtonsComponent";
+import FormButtonsComponent from "../../components/FormButtonsComponent";
 import { Link } from "react-router-dom";
 import ROUTES from "../../routers/ROUTES";
 

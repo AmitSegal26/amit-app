@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/HomePage";
-import RegisterPage from "../pages/RegisterPage";
+import RegisterPage from "../pages/Register/RegisterPage";
 import ROUTES from "./ROUTES";
 import LoginPage from "../pages/Login/LoginPage";
 import AboutPage from "../pages/AboutPage";
@@ -15,13 +15,13 @@ import ReRenderPage from "../sandbox/ReRenderPage/ReRenderPage";
 import NestedPage1 from "../sandbox/NestedRoutePage/NestedPage1";
 import NestedPage2 from "../sandbox/NestedRoutePage/NestedPage2";
 import FavCardPage from "../pages/FavCardPage";
-import ProfilePage from "../pages/ProfilePage";
+import ProfilePage from "../pages/Profile/ProfilePage";
 import EditCardPage from "../pages/EditCardPage";
 import CreateCardPage from "../pages/CreateCardPage";
 import CardPage from "../pages/CardPage/CardPage";
 import MyCardsPage from "../pages//MyCards/MyCardsPage";
 import CRMPage from "../pages/CRM/CRMPage";
-import ProfileDataPage from "../pages/ProfileDataPage";
+import ProfileDataPage from "../pages/CRM/ProfileDataPage";
 
 const Router = () => {
   return (

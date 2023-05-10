@@ -9,13 +9,12 @@ import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import validateRegisterSchema from "../validations/registerValidation";
-import ROUTES from "../routers/ROUTES";
+import validateRegisterSchema from "../../validations/registerValidation";
+import ROUTES from "../../routers/ROUTES";
 import { Switch } from "@mui/material";
-import RegisterFieldComponent from "../components/Register/RegisterFieldComponent";
+import RegisterFieldComponent from "./RegisterFieldComponent";
 import { toast } from "react-toastify";
-// import RegisterButtonsComponent from "../components/FormButtonsComponent";
-import FormButtonsComponent from "../components/FormButtonsComponent";
+import FormButtonsComponent from "../../components/FormButtonsComponent";
 const RegisterPage = () => {
   const [disableState, setDisable] = useState(true);
   const [isBizState, setIsBiz] = useState(false);
