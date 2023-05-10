@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -10,13 +9,12 @@ import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
-import ROUTES from "../routers/ROUTES";
-import validateLoginSchema from "../validations/loginValidation";
-import useLoggedIn from "../hooks/useLoggedIn";
+import ROUTES from "../../routers/ROUTES";
+import validateLoginSchema from "../../validations/loginValidation";
+import useLoggedIn from "../../hooks/useLoggedIn";
 import { toast } from "react-toastify";
-import FormButtonsComponent from "../components/FormButtonsComponent";
-
+import FormButtonsComponent from "../../components/FormButtonsComponent";
+import LoginPageForm from "./LoginPageForm";
 const LoginPage = () => {
   const [inputState, setInputState] = useState({
     email: "",
@@ -26,8 +24,41 @@ const LoginPage = () => {
   const [disableBtn, setDisable] = useState(true);
   const loggedIn = useLoggedIn();
   const navigate = useNavigate();
-
+  let attemptAndDateObject = localStorage.getItem("attemptsLeftAndDates");
+  let oneDayInDate = 1000 * 60 * 60 * 24;
+  useEffect(() => {
+    let lastAttemptInHours, attempts;
+    if (!attemptAndDateObject) {
+      attempts = 3;
+      lastAttemptInHours = Date.now() / oneDayInDate;
+    } else {
+      attemptAndDateObject = JSON.parse(attemptAndDateObject);
+      attempts = attemptAndDateObject.attempts;
+      lastAttemptInHours = attemptAndDateObject.lastAttemptInHours;
+    }
+    attemptAndDateObject = { attempts, lastAttemptInHours };
+    localStorage.setItem(
+      "attemptsLeftAndDates",
+      JSON.stringify(attemptAndDateObject)
+    );
+  }, []);
   const handleBtnClick = async (ev) => {
+    attemptAndDateObject = JSON.parse(
+      localStorage.getItem("attemptsLeftAndDates")
+    );
+    if (
+      Date.now() / oneDayInDate - attemptAndDateObject.lastAttemptInHours >=
+      24
+    ) {
+      //if 24 hours or more have passed since blocked
+      attemptAndDateObject.attempts = 3;
+      attemptAndDateObject.lastAttemptInHours = Date.now();
+    }
+    if (attemptAndDateObject.attempts == 0) {
+      toast.error("you are blocked!");
+
+      return;
+    }
     try {
       const joiResponse = validateLoginSchema(inputState);
       setInputsErrorsState(joiResponse);
@@ -38,9 +69,26 @@ const LoginPage = () => {
       localStorage.setItem("token", data.token);
       loggedIn();
       //move to homepage
+      attemptAndDateObject.attempts = 3;
+      attemptAndDateObject.lastAttemptInHours = Date.now() / oneDayInDate;
+      localStorage.setItem(
+        "attemptsLeftAndDates",
+        JSON.stringify(attemptAndDateObject)
+      );
       navigate(ROUTES.HOME);
     } catch (err) {
-      toast.error(err.response.data);
+      let {
+        response: { data },
+      } = err;
+      if (data == "Invalid email or password.") {
+        attemptAndDateObject.attempts--;
+        attemptAndDateObject.lastAttemptInHours = Date.now() / oneDayInDate;
+        localStorage.setItem(
+          "attemptsLeftAndDates",
+          JSON.stringify(attemptAndDateObject)
+        );
+      }
+      toast.error(data);
     }
   };
   const handleCancelClick = () => {
@@ -93,65 +141,15 @@ const LoginPage = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="div" noValidate sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={inputState.email}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.email && (
-                <Alert severity="warning">
-                  {inputsErrorsState.email.map((item) => (
-                    <div key={"email-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                value={inputState.password}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.password && (
-                <Alert severity="warning">
-                  {inputsErrorsState.password.map((item) => (
-                    <div key={"password-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-          </Grid>
-          <FormButtonsComponent
-            onCancel={handleCancelClick}
-            onReset={handleResetBtnClick}
-            onRegister={handleBtnClick}
-            clickBtnText="Sign In"
-            disableProp={disableBtn}
-          />
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link to={ROUTES.REGISTER}>
-                <Typography variant="body2">
-                  Did not have an account? Sign up
-                </Typography>
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
+        <LoginPageForm
+          inputStateProp={inputState}
+          inputErrorsStateProp={inputsErrorsState}
+          handleChangeFunc={handleInputChange}
+          handleCancelClickFunc={handleCancelClick}
+          handleResetClickFunc={handleResetBtnClick}
+          handleLoginClickFunc={handleBtnClick}
+          disableBtnProp={disableBtn}
+        />
       </Box>
     </Container>
   );

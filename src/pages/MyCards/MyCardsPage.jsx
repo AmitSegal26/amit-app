@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
@@ -10,22 +10,20 @@ import {
   Grid,
   IconButton,
 } from "@mui/material";
-import CardComponent from "../components/CardComponent";
-import { prevPageActions } from "../store/whereFrom";
-import ROUTES from "../routers/ROUTES";
+import CardComponent from "../../components/CardComponent";
+import { prevPageActions } from "../../store/whereFrom";
+import ROUTES from "../../routers/ROUTES";
 import AddIcon from "@mui/icons-material/Add";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import useQueryParams from "../hooks/useQueryParams";
-
+import useQueryParams from "../../hooks/useQueryParams";
+import AddCardButton from "./AddCardButton";
 const MyCardsPage = () => {
-  const [originalCardsArr, setOriginalCardsArr] = useState(null);
-  const [cardsArr, setCardsArr] = useState(null);
-  const [userState, setuserState] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let qparams = useQueryParams();
+  const [originalCardsArr, setOriginalCardsArr] = useState(null);
+  const [cardsArr, setCardsArr] = useState(null);
+  const [userState, setuserState] = useState("");
   const { payload } = useSelector((bigRedux) => bigRedux.authSlice);
-
   useEffect(() => {
     axios
       .get("/cards/my-cards")
@@ -89,7 +87,6 @@ const MyCardsPage = () => {
   useEffect(() => {
     filterFunc();
   }, [qparams.filter]);
-
   const addRemoveToLikesArray = async (id) => {
     try {
       let { data } = await axios.patch("/cards/card-like/" + id);
@@ -108,7 +105,6 @@ const MyCardsPage = () => {
         );
     }
   };
-
   const handleDeleteFromMyCardsArr = async (id) => {
     try {
       await axios.delete("/cards/" + id); // /cards/:id
@@ -145,7 +141,6 @@ const MyCardsPage = () => {
       </Container>
     );
   }
-
   return (
     <Fragment>
       <h1>
@@ -190,31 +185,9 @@ const MyCardsPage = () => {
           </Grid>
         ))}
       </Grid>
-      <Grid container spacing={3}>
-        <Grid item xs={9} />
-        <Grid item xs={3}>
-          <IconButton
-            sx={{
-              position: "fixed",
-              top: "80%",
-              left: { xs: "80%", sm: "85%", md: "90%" },
-            }}
-            onClick={handleCreateBtn}
-          >
-            <AddCircleIcon
-              color="primary"
-              style={{
-                width: "4rem",
-                height: "4rem",
-                cursor: "pointer",
-              }}
-            />
-          </IconButton>
-        </Grid>
-      </Grid>
+      <AddCardButton handleCreateFunc={handleCreateBtn} />
       <br />
     </Fragment>
   );
 };
-
 export default MyCardsPage;

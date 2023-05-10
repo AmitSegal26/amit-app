@@ -8,17 +8,17 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import ROUTES from "../routers/ROUTES";
+import ROUTES from "../../routers/ROUTES";
 import { useNavigate, useParams } from "react-router-dom";
-import { validateEditCardParamsSchema } from "../validations/editValidation";
+import { validateEditCardParamsSchema } from "../../validations/editValidation";
 import axios from "axios";
 import { toast } from "react-toastify";
-import atom from "../logo.svg";
+import logoReactForCard from "../../services/logos";
 import { useSelector } from "react-redux";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import CardBackButton from "../components/CardPage/CardBackButton";
-import CardTitles from "../components/CardPage/CardTitles";
-import AlertDialog from "../components/DialogComponent";
+import CardBackButton from "./CardBackButton";
+import CardTitles from "./CardTitles";
+import AlertDialog from "../../components/DialogComponent";
 const CardPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -110,7 +110,7 @@ const CardPage = () => {
     <Container component="main" maxWidth="xl">
       <br />
       <CardBackButton whereToVar={whereTo} onBackClick={handleCancelBtnClick} />
-      <CardTitles cardStateProp={cardState} atomProp={atom} />
+      <CardTitles cardStateProp={cardState} atomProp={logoReactForCard} />
       <Box
         sx={{
           display: "flex",
@@ -125,7 +125,11 @@ const CardPage = () => {
             {cardKeys.map((propOfCard) =>
               propOfCard !== "url" && propOfCard !== "alt" ? (
                 <Grid key={propOfCard} item sx={{ maxWidth: "15rem" }} xs={12}>
-                  <Typography variant="h6" gutterBottom color="white">
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{ color: "primary" }}
+                  >
                     {propOfCard === "_id" ? (
                       ""
                     ) : (
@@ -163,6 +167,11 @@ const CardPage = () => {
                         {bizNumberState ? bizNumberState : cardState.bizNumber}
                         <AlertDialog
                           onBtnChangeBizNumberClick={handleSaveBizChanges}
+                          buttonText="Edit The Business Number"
+                          questionHead="Are you sure you want to change the BIZNUMBER of this card?"
+                          questionBody="Changing the Business Number of this card is permanent. After
+                          Clicking 'Change' the previous Business Number will be lost forever"
+                          acceptText="Change"
                         />
                       </Fragment>
                     ) : propOfCard == "_id" ? (

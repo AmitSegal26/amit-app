@@ -34,9 +34,6 @@ const ProfileDataPage = () => {
         setUsersArr(users);
         delete currentProfile._id;
         delete currentProfile.__v;
-        currentProfile.createdAt = new Date(
-          currentProfile.createdAt
-        ).toLocaleDateString("hi");
         if (!currentProfile.imageUrl) {
           currentProfile.imageUrl =
             "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";

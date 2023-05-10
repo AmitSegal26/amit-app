@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import React, { Fragment } from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import AlertDialog from "../../components/DialogComponent";
 
 const TableForCRM = ({
   usersArrStateProp,
@@ -67,22 +67,22 @@ const TableForCRM = ({
                           {" "}
                           <Button
                             id={user._id}
-                            style={{ width: "10vw" }}
                             variant="contained"
                             color="primary"
                             onClick={handleEditUserFunc}
                           >
                             {user.biz ? "revoke business" : "make business"}
                           </Button>
-                          <Button
+                          <AlertDialog
                             id={user._id}
-                            style={{ width: "10vw" }}
-                            variant="contained"
-                            color="secondary"
-                            onClick={handleDeleteUserFunc}
-                          >
-                            Delete
-                          </Button>
+                            isForDeleting={true}
+                            onBtnChangeBizNumberClick={handleDeleteUserFunc}
+                            buttonText="Delete User"
+                            questionHead={`Are you sure you want to delete ${user.firstName}?`}
+                            questionBody="Deleting this user is permanent. After
+                          Clicking 'Delete' the user's information and existence will be lost forever"
+                            acceptText="Delete"
+                          />
                         </Fragment>
                       ) : (
                         ""
@@ -121,15 +121,16 @@ const TableForCRM = ({
                             </Button>
                           </Grid>
                           <Grid item xl={12}>
-                            <Button
+                            <AlertDialog
                               id={user._id}
-                              style={{ width: "10vw" }}
-                              variant="contained"
-                              color="secondary"
-                              onClick={handleDeleteUserFunc}
-                            >
-                              <DeleteForeverIcon id={user._id} />
-                            </Button>
+                              isForDeleting={true}
+                              onBtnChangeBizNumberClick={handleDeleteUserFunc}
+                              buttonText="Delete User"
+                              questionHead={`Are you sure you want to delete ${user.firstName}`}
+                              questionBody="Deleting this user is permanent. After
+                          Clicking 'Delete' the user's information and existence will be lost forever"
+                              acceptText="Delete"
+                            />
                           </Grid>
                         </Grid>
                       ) : (

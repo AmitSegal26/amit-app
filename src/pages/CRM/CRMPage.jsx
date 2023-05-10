@@ -2,8 +2,8 @@ import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Outlet, useNavigate } from "react-router-dom";
-import TableForCRM from "../components/CRM/TableForCRM";
-import ROUTES from "../routers/ROUTES";
+import TableForCRM from "./TableForCRM";
+import ROUTES from "../../routers/ROUTES";
 const CRMPage = () => {
   const navigate = useNavigate();
   const [usersArrState, setUsersArrState] = useState([]);
@@ -20,6 +20,7 @@ const CRMPage = () => {
   }, []);
 
   const handleDeleteUser = (ev) => {
+    console.log(ev.target);
     axios
       .delete("/users/deleteUser/" + ev.target.id)
       .then(() => {

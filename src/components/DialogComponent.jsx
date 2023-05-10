@@ -6,8 +6,19 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import EditIcon from "@mui/icons-material/Edit";
+import { Box } from "@mui/material";
+import { Fragment } from "react";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const AlertDialog = ({ onBtnChangeBizNumberClick }) => {
+const AlertDialog = ({
+  id,
+  isForDeleting,
+  onBtnChangeBizNumberClick,
+  buttonText,
+  questionHead,
+  questionBody,
+  acceptText,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -17,36 +28,59 @@ const AlertDialog = ({ onBtnChangeBizNumberClick }) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleAcceptBtn = () => {
-    onBtnChangeBizNumberClick();
+  const handleAcceptBtn = (ev) => {
+    onBtnChangeBizNumberClick(ev);
     setOpen(false);
   };
 
   return (
     <div>
-      <Button color="success" onClick={handleClickOpen}>
-        <EditIcon sx={{ ml: 1 }} color="warning" />
-        Edit The Business Number
-      </Button>
+      {isForDeleting ? (
+        <Fragment>
+          <Box sx={{ display: { xs: "none", sm: "flex" } }}>
+            <Button
+              style={{ width: "10vw" }}
+              variant="contained"
+              color="secondary"
+              onClick={handleClickOpen}
+            >
+              {buttonText}
+            </Button>
+          </Box>
+          <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+            <Button
+              style={{ width: "10vw" }}
+              variant="contained"
+              color="secondary"
+              onClick={handleClickOpen}
+            >
+              <DeleteForeverIcon />
+            </Button>
+          </Box>
+        </Fragment>
+      ) : (
+        <Button color="success" onClick={handleClickOpen}>
+          <EditIcon sx={{ ml: 1 }} color="warning" />
+          {buttonText}
+        </Button>
+      )}
+
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you sure you want to change the BIZNUMBER of this card?"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{questionHead}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Changing the Business Number of this card is permanent. After
-            Clicking 'accept' the previous Business Number will be lost forever
+            {questionBody}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleAcceptBtn} autoFocus>
-            Accept
+          <Button id={id} onClick={handleAcceptBtn} autoFocus>
+            {acceptText}
           </Button>
         </DialogActions>
       </Dialog>
@@ -56,6 +90,8 @@ const AlertDialog = ({ onBtnChangeBizNumberClick }) => {
 
 AlertDialog.defaultProps = {
   openOrNot: false,
+  isForDeleting: false,
+  id: "",
 };
 
 export default AlertDialog;

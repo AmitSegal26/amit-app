@@ -14,6 +14,19 @@ const SandboxPage = () => {
       <Link to="/sandbox/redux2">Redux Page 2</Link>
       <br />
       <Outlet backgroundColor="red" />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </Fragment>
   );
 };

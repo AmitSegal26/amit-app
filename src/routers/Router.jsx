@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import RegisterPage from "../pages/RegisterPage";
 import ROUTES from "./ROUTES";
-import LoginPage from "../pages/LoginPage";
+import LoginPage from "../pages/Login/LoginPage";
 import AboutPage from "../pages/AboutPage";
 import SuperProtectedRoute from "../components/SuperProtectedRoute";
 import ProtectedRoute from "../components/ProtectedRoute";
@@ -18,9 +18,9 @@ import FavCardPage from "../pages/FavCardPage";
 import ProfilePage from "../pages/ProfilePage";
 import EditCardPage from "../pages/EditCardPage";
 import CreateCardPage from "../pages/CreateCardPage";
-import CardPage from "../pages/CardPage";
-import MyCardsPage from "../pages/MyCardsPage";
-import CRMPage from "../pages/CRMPage";
+import CardPage from "../pages/CardPage/CardPage";
+import MyCardsPage from "../pages//MyCards/MyCardsPage";
+import CRMPage from "../pages/CRM/CRMPage";
 import ProfileDataPage from "../pages/ProfileDataPage";
 
 const Router = () => {
