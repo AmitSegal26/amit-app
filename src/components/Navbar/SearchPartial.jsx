@@ -69,6 +69,10 @@ const SearchPartial = () => {
     }
     navigate(`${href}?filter=${searchInput}`);
   };
+
+  if (window.location.href.includes(`${ROUTES.CRM}`)) {
+    return "";
+  }
   return (
     <form onSubmit={handleSearchSubmit}>
       <Search>
