@@ -17,6 +17,8 @@ const ProtectedRoute = ({ element, supposedToBeLoggedInThis, isLogOut }) => {
       if (!isLogOut) {
         //is not the log out component
         toast.error("only for logged users. log in first!");
+      } else {
+        toast.warning("you cannot log out if you are not logged in.");
       }
       return <Navigate to={ROUTES.HOME} />;
     }

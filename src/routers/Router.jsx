@@ -22,6 +22,7 @@ import CardPage from "../pages/CardPage/CardPage";
 import MyCardsPage from "../pages//MyCards/MyCardsPage";
 import CRMPage from "../pages/CRM/CRMPage";
 import ProfileDataPage from "../pages/CRM/ProfileDataPage";
+import Page404 from "../pages/Page404";
 
 const Router = () => {
   return (
@@ -84,6 +85,7 @@ const Router = () => {
             isAdmin={false}
             isBiz={true}
             element={<EditCardPage />}
+            alternateElementUrl={ROUTES.HOME}
           />
         }
       />
@@ -95,6 +97,7 @@ const Router = () => {
             isAdmin={false}
             isBiz={true}
             element={<CreateCardPage />}
+            alternateElementUrl={ROUTES.HOME}
           />
         }
       />
@@ -105,6 +108,7 @@ const Router = () => {
             isAdmin={false}
             isBiz={true}
             element={<CreateCardPage />}
+            alternateElementUrl={ROUTES.HOME}
           />
         }
       />
@@ -115,6 +119,7 @@ const Router = () => {
             isAdmin={true}
             isBiz={false}
             element={<CRMPage />}
+            alternateElementUrl={ROUTES.HOME}
           />
         }
       >
@@ -136,10 +141,11 @@ const Router = () => {
             isAdmin={false}
             isBiz={true}
             element={<MyCardsPage />}
+            alternateElementUrl={ROUTES.HOME}
           />
         }
       />
-      <Route path="*" element={<h1>404</h1>} />
+      <Route path="*" element={<Page404 />} />
     </Routes>
   );
 };

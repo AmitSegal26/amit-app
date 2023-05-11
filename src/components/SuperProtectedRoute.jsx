@@ -4,7 +4,12 @@ import { Navigate } from "react-router-dom";
 import ROUTES from "../routers/ROUTES";
 import { toast } from "react-toastify";
 
-const SuperProtectedRoute = ({ element, isAdmin, isBiz }) => {
+const SuperProtectedRoute = ({
+  element,
+  isAdmin,
+  isBiz,
+  alternateElementUrl,
+}) => {
   //* logic section
   const isLoggedIn = useSelector((bigState) => bigState.authSlice.isLoggedIn);
   const payload = useSelector((bigState) => bigState.authSlice.payload);
@@ -18,6 +23,11 @@ const SuperProtectedRoute = ({ element, isAdmin, isBiz }) => {
     }
   }
   toast.error("invalid permissions");
-  return <Navigate to={ROUTES.LOGIN} />;
+  return <Navigate to={alternateElementUrl} />;
 };
+
+SuperProtectedRoute.defaultProps = {
+  alternateElementUrl: ROUTES.LOGIN,
+};
+
 export default SuperProtectedRoute;
