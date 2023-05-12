@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import validateProfileEditSchema from "../../validations/profileEditValidation";
 import ROUTES from "../../routers/ROUTES";
-import { CircularProgress, Switch } from "@mui/material";
+import { Button, CircularProgress, Switch } from "@mui/material";
 import { toast } from "react-toastify";
 import profileInputArr from "../../services/editInputs";
 import { useDispatch } from "react-redux";
@@ -14,6 +14,7 @@ import { authActions } from "../../store/auth";
 import EditCardFieldComponent from "../../components/EditCardFieldComponent";
 import ProfilePageTitles from "./ProfilePageTitles";
 import ProfilePageBtnsAndLinks from "./ProfilePageBtnsAndLinks";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const [disableState, setDisable] = useState(true);
@@ -49,9 +50,7 @@ const ProfilePage = () => {
     setIsBiz(ev.target.checked);
   };
   const handleOpenEditClick = () => {
-    console.log("before " + disableFieldState);
     setDisableFieldState(!disableFieldState);
-    console.log("after " + !disableFieldState);
   };
   const handleBtnClick = async (ev) => {
     try {
@@ -148,6 +147,18 @@ const ProfilePage = () => {
           alignItems: "center",
         }}
       >
+        <Grid container>
+          <Grid item xs={3}>
+            <Button
+              color="primary"
+              variant="outlined"
+              onClick={handleCancelBtnClick}
+            >
+              <FirstPageIcon />
+              Back To Home
+            </Button>
+          </Grid>
+        </Grid>
         <ProfilePageTitles disableFieldStateProp={disableFieldState} />
         <Box component="div" noValidate sx={{ mt: 3 }}>
           <Grid container spacing={2}>

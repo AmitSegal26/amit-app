@@ -119,7 +119,9 @@ const CardComponent = ({
         ) : (
           ""
         )}
-        likes:{likesArrayOfUsers.length}
+        <Typography sx={{ display: { sm: "none" } }}>
+          likes:{likesArrayOfUsers.length}
+        </Typography>
         {canEdit ? (
           <Button>
             <BorderColorIcon
