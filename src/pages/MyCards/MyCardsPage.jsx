@@ -31,7 +31,11 @@ const MyCardsPage = () => {
         filterFunc(data);
       })
       .catch((err) => {
-        // toast.error(err.response.data);
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
+        toast.error(err.response.data);
       });
     axios
       .get("/users/userInfo")
@@ -39,6 +43,10 @@ const MyCardsPage = () => {
         setuserState(data);
       })
       .catch((err) => {
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
         toast.error(err.response.data);
       });
   }, []);
@@ -98,6 +106,10 @@ const MyCardsPage = () => {
       });
       setCardsArr(newCardsArr);
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       let error = err.response.data;
       error.startsWith("card validation failed:") &&
         toast.error(
@@ -112,6 +124,10 @@ const MyCardsPage = () => {
         newCardsArr.filter((item) => item._id != id)
       );
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       toast.error(err.response.data);
     }
   };

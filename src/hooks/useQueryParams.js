@@ -1,11 +1,5 @@
 import { useSearchParams } from "react-router-dom";
 
-/*
-  חייב להתחיל ב
-  use
-  חייב להיות פונקציה
-*/
-
 const useQueryParams = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   let query = {};

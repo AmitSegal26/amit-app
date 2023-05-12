@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import ROUTES from "../routers/ROUTES";
 import CardComponent from "../components/CardComponent";
 import { useDispatch, useSelector } from "react-redux";
-// import { addToLikesArray } from "../services/addToLikes";
 import { toast } from "react-toastify";
 import { prevPageActions } from "../store/whereFrom";
 import useQueryParams from "../hooks/useQueryParams";
@@ -25,7 +24,11 @@ const FavCardPage = () => {
         setOriginalLikedCardsArrState(data);
         filterFunc(data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        toast.error(
+          "there was an error loading your liked cards, please try again later. sorry for the inconvenience"
+        );
+      });
   }, []);
   useEffect(() => {
     axios
@@ -33,17 +36,19 @@ const FavCardPage = () => {
       .then(({ data }) => {
         setLikedCardsArrState(data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        toast.error(
+          "there was an error removing your liked card, please try again later. sorry for the inconvenience"
+        );
+      });
   }, [originalLikedCardsArrState]);
   const filterFunc = (data) => {
-    console.log("ACTIVATED");
     if (!originalCardsArr && !data) {
       return;
     }
     let filter = "";
     if (qparams.filter) {
       filter = qparams.filter;
-      console.log("filter current", filter);
     }
     if (!originalCardsArr && data) {
       /*
@@ -58,10 +63,6 @@ const FavCardPage = () => {
         );
       } else {
         setLikedCardsArrState(
-          data.filter((card) => card.title.startsWith(filter))
-        );
-        console.log(
-          "state not loaded:",
           data.filter((card) => card.title.startsWith(filter))
         );
       }
@@ -83,15 +84,10 @@ const FavCardPage = () => {
         setLikedCardsArrState(
           newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
         );
-        console.log(
-          "all loaded:",
-          newOriginalCardsArr.filter((card) => card.title.startsWith(filter))
-        );
       }
     }
   };
   useEffect(() => {
-    console.log("changes");
     filterFunc();
   }, [qparams.filter]);
   const addRemoveToLikesArray = async (id) => {
@@ -106,6 +102,10 @@ const FavCardPage = () => {
       setLikedCardsArrState(newCardsArr);
       setOriginalLikedCardsArrState(newCardsArr);
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       let error = err.response.data;
       error.startsWith("card validation failed:") &&
         toast.error(
@@ -120,6 +120,10 @@ const FavCardPage = () => {
         newCardsArr.filter((item) => item._id != id)
       );
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       toast.error(err.response.data);
     }
   };

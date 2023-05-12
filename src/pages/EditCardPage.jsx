@@ -32,7 +32,7 @@ const EditCardPage = () => {
       try {
         const errors = validateEditCardParamsSchema({ id });
         if (errors) {
-          // there was errors = incorrect id
+          // there were errors = incorrect id
           navigate("/");
           return;
         }
@@ -58,14 +58,18 @@ const EditCardPage = () => {
         delete newInputState.bizNumber;
         delete newInputState.createdAt;
         delete newInputState.address;
-        //.address is not acceptable by the server!
+        //!.address is not acceptable by the server!
         setInputState(newInputState);
 
         if (!validateEditSchema(newInputState)) {
           setDisable(false);
         }
       } catch (err) {
-        toast.error(err);
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
+        toast.error(err.response.data);
       }
     })();
   }, [id]);
@@ -82,6 +86,10 @@ const EditCardPage = () => {
         navigate(ROUTES.HOME);
       }
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       toast.error("SERVER ERR: " + err.response.data);
     }
   };

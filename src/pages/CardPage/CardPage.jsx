@@ -71,7 +71,11 @@ const CardPage = () => {
         setCardState(newcardState);
         setBizNumberState(newcardState.bizNumber);
       } catch (err) {
-        toast.error(err);
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
+        toast.error(err.response.data);
       }
     })();
   }, [id]);
@@ -103,7 +107,9 @@ const CardPage = () => {
       );
       setBizNumberState(relavantCard.bizNumber);
     } catch (err) {
-      console.log("ERR", err.response.data);
+      toast.error(
+        "there was an error changing the bizNumber, try again later."
+      );
     }
   };
   return (

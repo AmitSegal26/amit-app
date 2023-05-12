@@ -88,6 +88,10 @@ const RegisterPage = () => {
       });
       navigate(ROUTES.LOGIN);
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       toast.error(err.response.data);
     }
   };

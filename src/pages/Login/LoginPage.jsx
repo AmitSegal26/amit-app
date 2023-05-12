@@ -77,6 +77,10 @@ const LoginPage = () => {
       );
       navigate(ROUTES.HOME);
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       let {
         response: { data },
       } = err;

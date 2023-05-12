@@ -31,6 +31,10 @@ const HomePage = () => {
         filterFunc(data);
       })
       .catch((err) => {
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
         toast.error("server ERR", err.response.data);
       });
   }, []);
@@ -91,6 +95,10 @@ const HomePage = () => {
       });
       setCardsArr(newCardsArr);
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       let error = err.response.data;
       error.startsWith("card validation failed:") &&
         toast.error(
@@ -105,6 +113,10 @@ const HomePage = () => {
         newCardsArr.filter((item) => item._id != id)
       );
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       toast.error(err.response.data);
     }
   };

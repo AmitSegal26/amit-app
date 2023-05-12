@@ -56,6 +56,10 @@ const ProfileDataPage = () => {
         window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
       })
       .catch((err) => {
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
         toast.error("ERR", err.response.data);
       });
   }, [id]);

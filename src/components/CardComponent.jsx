@@ -97,7 +97,6 @@ const CardComponent = ({
         <Button>
           <PhoneIcon sx={{ mr: 5, m: 2 }} color="primary" />
         </Button>
-        {/* untill shlomo answers the question */}
         {canLike ? (
           isLiked ? (
             <Button>

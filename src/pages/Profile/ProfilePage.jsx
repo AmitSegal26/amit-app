@@ -42,7 +42,11 @@ const ProfilePage = () => {
           setDisable(false);
         }
       } catch (err) {
-        toast.error(err);
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
+        toast.error(err.response.data);
       }
     })();
   }, []);
@@ -93,6 +97,10 @@ const ProfilePage = () => {
       );
       navigate(ROUTES.HOME);
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       toast.error("ERR " + err.response.data);
     }
   };

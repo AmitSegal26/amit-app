@@ -50,16 +50,7 @@ const ProfilePageBtnsAndLinks = ({
         disableAll={disableFieldStateProp}
       />
       <Grid container justifyContent="flex-end">
-        <Grid item>
-          <Link to={ROUTES.LOGIN} sx={{ textDecoration: "none" }}>
-            <Typography
-              component="h6"
-              sx={{ color: "green", textDecoration: "none" }}
-            >
-              Already have an account? Sign in
-            </Typography>
-          </Link>
-        </Grid>
+        <Grid item></Grid>
       </Grid>
     </Fragment>
   );

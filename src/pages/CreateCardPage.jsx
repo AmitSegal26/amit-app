@@ -38,6 +38,10 @@ const CreateCardPage = () => {
         navigate(ROUTES.HOME);
       }
     } catch (err) {
+      if (!err.response) {
+        toast.error("something went wrong, try again later");
+        return;
+      }
       toast.error("SERVER ERR: " + err.response.data);
     }
   };

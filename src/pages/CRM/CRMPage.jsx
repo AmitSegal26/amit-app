@@ -15,12 +15,15 @@ const CRMPage = () => {
         setUsersArrState(users);
       })
       .catch((err) => {
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
         toast.error("ERR" + err.response.data);
       });
   }, []);
 
   const handleDeleteUser = (ev) => {
-    console.log(ev.target);
     axios
       .delete("/users/deleteUser/" + ev.target.id)
       .then(() => {
@@ -30,6 +33,10 @@ const CRMPage = () => {
         toast.success("user deleted");
       })
       .catch((err) => {
+        if (!err.response) {
+          toast.error("something went wrong, try again later");
+          return;
+        }
         toast.error("ERR " + err.response.data);
       });
   };
@@ -37,7 +44,6 @@ const CRMPage = () => {
   const handleEditUser = async (ev) => {
     try {
       let newUsersArr = JSON.parse(JSON.stringify(usersArrState));
-      //!WHY DOES IT BUG WHEN FINDING THE ID?
       let currentUser = newUsersArr.find((user) => user._id == ev.target.id);
       await axios.put("/users/userInfo/" + currentUser._id, {
         firstName: currentUser.firstName,
@@ -67,7 +73,6 @@ const CRMPage = () => {
       }
     } catch (err) {
       toast.error("ERR: something went wrong.");
-      console.log(err);
     }
   };
   const handleSeeProfileClick = (ev) => {
